@@ -1,0 +1,2881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beauty Assistant — Your Personal Beauty Consultation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+/* ══════════════════════════════════════
+   LUXURY DESIGN TOKENS
+══════════════════════════════════════ */
+:root{
+  /*─ Pink Mist palette (from inspiration)─ */
+  --pink-mist:#F7DAE7;
+  --bubblegum:#D4A4C2;
+  --cherry:#B4647A;
+  --ruby:#9F4C60;
+
+  /* Base — dreamy pink surfaces */
+  --bg:#FBDFE9;
+  --bg-deep:#F2C4D6;
+  --bg-light:#FDE8F0;
+  --ivory:#FFF2F6;
+
+  /* Accent — cherry / ruby */
+  --rose:#B4647A;
+  --rose-light:#D07A92;
+  --rose-dark:#9F4C60;
+  --rose-muted:#D4A4C2;
+  --rose-faint:rgba(180,100,122,.10);
+  --rose-glow:rgba(180,100,122,.20);
+
+  /* White & glass */
+  --glass:rgba(255,255,255,.55);
+  --glass-border:rgba(255,255,255,.70);
+  --glass-strong:rgba(255,255,255,.75);
+
+  /* Text */
+  --text-primary:#4A1A2E;
+  --text-secondary:#7A4060;
+  --text-tertiary:#B08898;
+  --text-inverse:#FFF2F6;
+
+  /* Borders & surfaces */
+  --border:rgba(180,100,122,.18);
+  --border-light:rgba(255,255,255,.50);
+  --surface:#FFFFFF;
+  --surface-warm:#FFF8FA;
+
+  /* Gradients */
+  --g-hero:linear-gradient(160deg,#FBDFE9 0%,#F2C4D6 40%,#EAADC4 100%);
+  --g-accent:linear-gradient(135deg,#B4647A 0%,#9F4C60 100%);
+  --g-accent-warm:linear-gradient(135deg,#D07A92 0%,#B4647A 60%,#9F4C60 100%);
+  --g-gold:linear-gradient(135deg,#E0BC96 0%,#D4A87C 50%,#B88A5E 100%);
+  --g-cta:linear-gradient(135deg,#C06880 0%,#B4647A 40%,#9F4C60 100%);
+  --g-page:linear-gradient(180deg,#FDE8F0 0%,#FBDFE9 30%,#F2C4D6 100%);
+
+  /* Shadows — soft pink */
+  --sh-xs:0 1px 4px rgba(159,76,96,.06);
+  --sh-sm:0 3px 12px rgba(159,76,96,.08);
+  --sh-md:0 6px 24px rgba(159,76,96,.12);
+  --sh-lg:0 12px 48px rgba(159,76,96,.16);
+  --sh-xl:0 20px 60px rgba(159,76,96,.20);
+  --sh-glow:0 6px 30px rgba(159,76,96,.22);
+
+  /* Radius — rounder, softer */
+  --r:24px; --rs:16px; --rp:999px;
+
+  /* Transitions */
+  --ease:cubic-bezier(.4,0,.2,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+
+/*Reset*/
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-size:19px}
+
+body{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  background:var(--bg);
+  min-height:100vh;
+  color:var(--text-primary);
+  line-height:1.75;
+  font-weight:400;
+  font-size:17px;
+  letter-spacing:-.01em;
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* Large decorative blob shapes — dreamy background */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 600px 600px at 0% 0%,rgba(255,255,255,.45),transparent),
+    radial-gradient(ellipse 500px 500px at 100% 10%,rgba(234,173,196,.40),transparent),
+    radial-gradient(ellipse 400px 400px at 80% 80%,rgba(255,255,255,.35),transparent),
+    radial-gradient(ellipse 500px 500px at 10% 90%,rgba(212,164,194,.30),transparent),
+    radial-gradient(ellipse 300px 300px at 50% 50%,rgba(255,255,255,.20),transparent);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+body > *{position:relative;z-index:1}
+
+/* ══════════════════════════════════════
+   HEADER
+══════════════════════════════════════ */
+header{
+  position:sticky;top:0;z-index:200;
+  background:var(--glass-strong);backdrop-filter:blur(24px) saturate(1.3);
+  border-bottom:1px solid var(--glass-border);
+  padding:.85rem 2.5rem;display:flex;align-items:center;justify-content:space-between;
+  transition:box-shadow .3s var(--ease);
+}
+header.scrolled{box-shadow:var(--sh-md)}
+
+.logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.logo-mark{
+  width:40px;height:40px;
+  background:var(--g-accent);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;color:var(--text-inverse);
+  box-shadow:0 3px 12px rgba(159,76,96,.30);
+  transition:transform .3s var(--ease-out);
+}
+.logo:hover .logo-mark{transform:rotate(15deg) scale(1.08)}
+.logo-text{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;font-weight:500;color:var(--text-primary);letter-spacing:-.02em}
+
+.header-right{display:flex;align-items:center;gap:1.4rem}
+.header-nav{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.05rem;font-weight:500;color:var(--text-secondary);
+  text-decoration:none;letter-spacing:.02em;
+  padding:.3rem 0;border-bottom:1.5px solid transparent;
+  transition:all .25s var(--ease);
+}
+.header-nav:hover{color:var(--rose);border-bottom-color:var(--rose)}
+.header-nav.active{color:var(--rose);border-bottom-color:var(--rose)}
+.header-tag{font-size:.7rem;color:var(--text-tertiary);letter-spacing:.6px;text-transform:uppercase}
+
+.cart-header-btn{
+  position:relative;background:var(--glass);color:var(--rose);
+  border:1.5px solid var(--glass-border);
+  border-radius:var(--rp);padding:.45rem 1rem .45rem .8rem;
+  font-family:inherit;font-size:.82rem;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;gap:.4rem;
+  backdrop-filter:blur(8px);
+  transition:all .25s var(--ease);
+}
+.cart-header-btn:hover{background:var(--glass-strong);transform:translateY(-1px);box-shadow:var(--sh-sm)}
+.cart-count{
+  background:var(--g-accent);color:var(--text-inverse);
+  border-radius:50%;width:20px;height:20px;font-size:.68rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+.hero{
+  text-align:center;padding:4.5rem 2rem 4rem;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#F2C4D6 0%,#EAADC4 50%,#E098B4 100%);
+}
+/* Large white blob shapes — like the inspiration */
+.hero::before{
+  content:'';position:absolute;
+  width:500px;height:500px;border-radius:50%;
+  top:-180px;right:-120px;
+  background:rgba(255,255,255,.18);
+}
+.hero::after{
+  content:'';position:absolute;
+  width:350px;height:350px;border-radius:50%;
+  bottom:-100px;left:-80px;
+  background:rgba(255,255,255,.12);
+}
+.hero>*{position:relative;z-index:1}
+
+/* Ornamental line */
+.hero-ornament{
+  display:flex;align-items:center;justify-content:center;gap:.8rem;
+  margin-bottom:1rem;color:rgba(255,255,255,.5);font-size:.85rem;letter-spacing:.3em;
+}
+.hero-ornament::before,.hero-ornament::after{
+  content:'';width:40px;height:1px;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.4),transparent);
+}
+.hero h1{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(2.6rem,6vw,3.8rem);
+  color:#fff;line-height:1.1;
+  margin-bottom:.8rem;font-weight:500;letter-spacing:-.03em;
+  text-shadow:0 2px 20px rgba(159,76,96,.15);
+}
+.hero p{color:rgba(255,255,255,.80);font-size:1.15rem;font-weight:300;margin-bottom:1.4rem;letter-spacing:.01em}
+
+/* Feature badges — glass pills */
+.hero-features{
+  display:flex;justify-content:center;gap:.55rem;flex-wrap:wrap;margin-bottom:1.5rem;
+}
+.hero-feature{
+  display:flex;align-items:center;gap:.35rem;
+  background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.35);
+  border-radius:var(--rp);padding:.4rem 1rem;
+  font-size:.72rem;font-weight:500;color:#fff;
+  backdrop-filter:blur(8px);
+}
+.hero-feature-icon{font-size:.85rem}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(255,255,255,.20);border:1px solid rgba(255,255,255,.30);
+  border-radius:var(--rp);padding:.4rem 1.4rem;
+  font-size:.66rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.70);backdrop-filter:blur(8px);
+}
+
+/* ══════════════════════════════════════
+   PROGRESS INDICATOR
+══════════════════════════════════════ */
+.progress-bar{
+  display:flex;align-items:center;justify-content:center;gap:0;
+  padding:1.8rem 2.5rem;max-width:760px;margin:-1.5rem auto 0;
+  background:var(--glass-strong);border-radius:var(--r);
+  box-shadow:var(--sh-md);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(16px);
+}
+.progress-step{
+  display:flex;flex-direction:column;align-items:center;gap:.4rem;
+  flex:0 0 auto;cursor:pointer;transition:all .2s var(--ease);position:relative;z-index:2;
+}
+.progress-dot{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--surface);border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:1rem;font-weight:500;
+  color:var(--text-tertiary);
+  transition:all .35s var(--ease-out);
+}
+.progress-step.active .progress-dot{
+  background:var(--g-accent);border-color:var(--rose);
+  color:var(--text-inverse);box-shadow:var(--sh-glow);transform:scale(1.1);
+}
+.progress-step.completed .progress-dot{
+  background:var(--rose-muted);border-color:var(--rose-muted);
+  color:#fff;
+}
+.progress-label{
+  font-size:.85rem;font-weight:500;letter-spacing:.5px;text-transform:uppercase;
+  color:var(--text-tertiary);transition:color .2s;white-space:nowrap;
+}
+.progress-step.active .progress-label{color:var(--rose)}
+.progress-step.completed .progress-label{color:var(--rose)}
+.progress-line{
+  flex:1;height:2px;background:var(--border);margin:0 .2rem;
+  position:relative;top:-10px;min-width:20px;
+}
+.progress-line.filled{background:var(--rose-muted)}
+
+/* ══════════════════════════════════════
+   CONTAINER & STEPS
+══════════════════════════════════════ */
+.container{max-width:720px;margin:0 auto;padding:2rem 1.5rem 6rem}
+
+.wizard-step{
+  display:none;
+  animation:stepFadeIn .5s var(--ease-out) forwards;
+}
+.wizard-step.active{display:block}
+@keyframes stepFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/*Section label*/
+.slabel{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.85rem;color:var(--text-primary);
+  margin-bottom:.5rem;display:flex;align-items:center;gap:.6rem;
+  font-weight:500;letter-spacing:-.02em;
+}
+.slabel::before{
+  content:'';display:block;width:4px;height:22px;
+  background:var(--g-accent);border-radius:4px;flex-shrink:0;
+}
+.slabel-sub{
+  font-size:1.05rem;color:var(--text-tertiary);font-weight:300;
+  line-height:1.7;margin-bottom:1.8rem;padding-left:16px;
+}
+
+/* Step intro ornament */
+.step-intro{
+  text-align:center;margin-bottom:1.2rem;
+}
+.step-intro-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:48px;height:48px;border-radius:50%;
+  background:var(--g-accent);color:var(--text-inverse);
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:1.3rem;font-weight:500;
+  box-shadow:var(--sh-glow);margin-bottom:.5rem;
+}
+.step-intro-title{
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:1.7rem;
+  color:var(--text-primary);font-weight:500;
+}
+.step-intro-line{
+  width:40px;height:2px;margin:.5rem auto 0;
+  background:linear-gradient(to right,transparent,var(--rose-muted),transparent);
+}
+
+/*Card — glass style*/
+.card{
+  background:var(--glass-strong);border-radius:var(--r);
+  box-shadow:var(--sh-md);
+  padding:2.2rem 2.4rem;margin-bottom:1.8rem;
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(16px);
+  transition:box-shadow .3s var(--ease),transform .3s var(--ease);
+  position:relative;overflow:hidden;z-index:1;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--rose-muted),var(--rose),var(--rose-muted),transparent);
+  opacity:.6;
+}
+.card:hover{box-shadow:var(--sh-lg);transform:translateY(-2px)}
+
+/* ══════════════════════════════════════
+   EVENT / OCCASION BUTTONS
+══════════════════════════════════════ */
+.event-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.event-btn{
+  display:flex;flex-direction:column;align-items:center;gap:.6rem;
+  background:var(--glass-strong);border:1.5px solid var(--glass-border);
+  color:var(--text-secondary);
+  padding:1.8rem 1rem 1.5rem;border-radius:20px;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.25rem;font-weight:500;
+  cursor:pointer;transition:all .35s var(--ease);user-select:none;
+  position:relative;overflow:hidden;
+  backdrop-filter:blur(12px);
+  box-shadow:var(--sh-sm);
+}
+/* Soft inner glow */
+.event-btn::before{
+  content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);
+  width:120%;height:50%;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(255,255,255,.35),transparent 70%);
+  pointer-events:none;
+}
+.event-btn::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 60%,var(--rose-faint),transparent 70%);
+  opacity:0;transition:opacity .35s;
+}
+.event-btn:hover::after{opacity:1}
+.event-btn .ev-icon{
+  font-size:2.8rem;position:relative;z-index:1;
+  transition:transform .35s var(--ease-out);
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,.08));
+}
+.event-btn span:last-child{position:relative;z-index:1;letter-spacing:.02em}
+.event-btn:hover{
+  transform:translateY(-5px);box-shadow:var(--sh-lg);
+  border-color:var(--rose-muted);
+}
+.event-btn:hover .ev-icon{transform:scale(1.15) translateY(-2px)}
+.event-btn.active{
+  background:var(--g-accent);
+  border-color:var(--rose);color:#fff;font-weight:600;
+  box-shadow:var(--sh-glow);
+}
+.event-btn.active .ev-icon{filter:brightness(10) drop-shadow(0 2px 4px rgba(0,0,0,.1))}
+.event-btn.active::before{background:radial-gradient(ellipse,rgba(255,255,255,.15),transparent 70%)}
+.event-btn.active::after{opacity:1;background:radial-gradient(circle at 50% 60%,rgba(255,255,255,.10),transparent 70%)}
+
+/* ══════════════════════════════════════
+   PROFILE CHIPS (skin type / undertone / lightness)
+══════════════════════════════════════ */
+.profile-row{margin-bottom:1.8rem}
+.profile-label{
+  font-size:.85rem;font-weight:500;color:var(--text-tertiary);
+  text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.8rem;
+}
+.profile-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.7rem}
+.profile-chip{
+  display:flex;align-items:center;justify-content:center;gap:.45rem;
+  background:var(--glass-strong);border:1.5px solid var(--glass-border);
+  color:var(--text-secondary);padding:.8rem 1rem;border-radius:var(--rs);
+  font-size:1.05rem;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;
+  cursor:pointer;transition:all .3s var(--ease);user-select:none;
+  backdrop-filter:blur(8px);box-shadow:var(--sh-xs);
+  text-align:center;
+}
+.profile-chip:hover{background:var(--surface);transform:translateY(-3px);box-shadow:var(--sh-md);border-color:var(--rose-muted)}
+.profile-chip.detected{
+  background:var(--surface);
+  border:2px solid var(--rose-muted);
+  color:var(--text-primary);
+  position:relative;
+}
+.profile-chip.detected::after{
+  content:'AI suggestion';position:absolute;top:-9px;right:-4px;
+  background:var(--rose-muted);color:#fff;
+  font-size:.58rem;padding:.12rem .55rem;border-radius:var(--rp);
+  font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+}
+/* Active must override detected */
+.profile-chip.active,
+.profile-chip.active.detected{
+  background:var(--g-accent);border-color:var(--rose);
+  color:#fff;font-weight:600;
+  box-shadow:var(--sh-glow);transform:translateY(-2px);
+}
+.profile-chip-hint{
+  font-size:.88rem;font-style:italic;color:var(--text-tertiary);
+  background:transparent;border-style:dashed;grid-column:1 / -1;
+}
+.profile-chip-hint.active{
+  background:var(--gold-faint);color:var(--gold-dark);
+  font-style:normal;border-style:solid;border-color:var(--gold);
+}
+
+/*Skin input*/
+.skin-input{
+  width:100%;padding:.9rem 1.2rem;
+  border:1.5px solid var(--glass-border);border-radius:var(--rs);
+  background:var(--glass);color:var(--text-primary);
+  font-size:.95rem;font-family:inherit;
+  resize:vertical;min-height:80px;
+  transition:border-color .2s,box-shadow .2s,background .2s;outline:none;
+  line-height:1.6;backdrop-filter:blur(6px);
+}
+.skin-input:focus{border-color:var(--rose-muted);background:var(--glass-strong);box-shadow:0 0 0 3px rgba(180,100,122,.10)}
+.skin-input::placeholder{color:var(--text-tertiary);font-style:italic;font-weight:300}
+.card-desc{font-size:1.02rem;color:var(--text-tertiary);font-weight:300;margin-bottom:1.5rem;line-height:1.75}
+
+/* ══════════════════════════════════════
+   SHADE MATCHING / UPLOAD
+══════════════════════════════════════ */
+.optional-tag{
+  font-family:inherit;font-size:.72rem;font-weight:500;
+  color:var(--text-tertiary);background:var(--cream);
+  border:1px solid var(--border);border-radius:var(--rp);
+  padding:.15rem .6rem;letter-spacing:.5px;margin-left:.4rem;
+  text-transform:uppercase;
+}
+
+.photo-tip{
+  background:linear-gradient(135deg,#FFF0F5,#FFE4EE);
+  border:1px solid var(--border);border-left:3px solid var(--rose-muted);
+  border-radius:var(--rs);padding:.7rem 1rem;
+  font-size:.9rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1.2rem;
+}
+.photo-tip strong{color:var(--text-primary)}
+
+.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem}
+.upload-zone{
+  border:2px dashed var(--rose-muted);border-radius:var(--rs);
+  background:linear-gradient(135deg,rgba(255,255,255,.4),rgba(255,255,255,.2));
+  min-height:200px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .3s var(--ease);overflow:hidden;position:relative;
+  backdrop-filter:blur(6px);
+}
+.upload-zone::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.3),transparent 70%);
+  opacity:0;transition:opacity .3s;
+}
+.upload-zone:hover{border-color:var(--rose);box-shadow:var(--sh-lg);background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(255,255,255,.3))}
+.upload-zone:hover::before{opacity:1}
+.upload-zone.has-image{border-style:solid;border-color:var(--rose);box-shadow:var(--sh-md)}
+.upload-placeholder{text-align:center;padding:1.2rem;pointer-events:none;position:relative;z-index:1}
+.upload-icon{font-size:3rem;margin-bottom:.6rem}
+.upload-label{font-size:1.05rem;font-weight:500;color:var(--text-secondary);margin-bottom:.25rem}
+.upload-hint{font-size:.85rem;color:var(--text-tertiary);font-weight:300}
+.upload-preview{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.upload-clear{
+  position:absolute;top:.5rem;right:.5rem;
+  background:rgba(255,255,255,.9);backdrop-filter:blur(4px);
+  border:1px solid var(--border);border-radius:50%;
+  width:24px;height:24px;font-size:.7rem;cursor:pointer;
+  display:none;align-items:center;justify-content:center;
+  color:var(--text-secondary);line-height:1;z-index:2;
+  transition:all .2s;
+}
+.upload-zone.has-image .upload-clear{display:flex}
+.upload-clear:hover{background:var(--surface);border-color:var(--rose-muted);color:var(--rose)}
+
+.analyse-btn{
+  width:100%;padding:.85rem;
+  background:var(--glass-strong);border:1.5px solid var(--glass-border);
+  border-radius:var(--rp);color:var(--text-secondary);
+  font-family:inherit;font-size:1.05rem;font-weight:500;
+  cursor:pointer;transition:all .25s var(--ease);backdrop-filter:blur(8px);
+}
+.analyse-btn:hover:not(:disabled){
+  background:var(--surface);border-color:var(--rose-muted);
+  color:var(--rose);transform:translateY(-2px);box-shadow:var(--sh-sm);
+}
+.analyse-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.undertone-result{
+  margin-top:1.2rem;background:var(--surface-warm);
+  border:1px solid var(--border);border-radius:var(--rs);
+  padding:1.2rem;display:flex;align-items:center;gap:1rem;
+  animation:stepFadeIn .35s var(--ease-out);
+}
+.undertone-swatch{width:52px;height:52px;border-radius:50%;border:3px solid #fff;box-shadow:var(--sh-md);flex-shrink:0}
+.undertone-name{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;font-weight:500;color:var(--text-primary);margin-bottom:.2rem}
+.undertone-depth{font-size:1rem;color:var(--text-tertiary);margin-bottom:.4rem}
+.undertone-tip{font-size:.95rem;color:var(--text-secondary);line-height:1.7;font-style:italic}
+.conf-bar-wrap{margin-top:.4rem;display:flex;align-items:center;gap:.5rem}
+.conf-bar-bg{flex:1;height:3px;background:var(--sand);border-radius:3px;overflow:hidden}
+.conf-bar-fill{height:100%;background:var(--g-gold);border-radius:3px;transition:width .6s var(--ease-out)}
+.conf-label{font-size:.85rem;color:var(--text-tertiary);white-space:nowrap}
+.undertone-active-badge{display:none;background:var(--g-gold);color:var(--text-inverse);border-radius:var(--rp);font-size:.62rem;padding:.15rem .65rem;margin-left:.5rem;vertical-align:middle;font-weight:600}
+
+/* Manual hex picker */
+/* Skin analysis result (skin type + acne from CNN/heuristics) */
+.skin-analysis-row{
+  margin-top:.8rem;padding-top:.8rem;border-top:1px dashed var(--border);
+}
+.analysis-title{
+  font-size:.92rem;font-weight:500;color:var(--text-primary);margin-bottom:.5rem;
+}
+.analysis-items{
+  display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem;
+}
+.analysis-item{
+  display:flex;align-items:center;gap:.5rem;
+  background:var(--glass-strong);border:1px solid var(--glass-border);
+  border-radius:var(--rs);padding:.6rem 1rem;
+  backdrop-filter:blur(8px);
+}
+.analysis-label{
+  font-size:.82rem;color:var(--text-tertiary);
+}
+.analysis-value{
+  font-size:1rem;font-weight:500;color:var(--text-primary);
+}
+.analysis-conf{
+  font-size:.78rem;color:var(--text-tertiary);font-style:italic;
+}
+.analysis-acne-moderate{color:#A06820}
+.analysis-acne-severe{color:var(--rose-dark)}
+.analysis-hint{
+  font-size:.85rem;color:var(--text-tertiary);font-style:italic;margin-top:.3rem;
+}
+
+.hex-picker-row{display:flex;align-items:center;gap:.55rem;margin-top:.7rem;padding-top:.6rem;border-top:1px dashed var(--border)}
+.hex-picker-label{font-size:.92rem;color:var(--gold-dark);font-weight:500}
+.hex-picker{width:34px;height:34px;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--gold),var(--sh-sm);border-radius:50%;cursor:pointer;padding:0;background:none;-webkit-appearance:none;appearance:none}
+.hex-picker::-webkit-color-swatch-wrapper{padding:0;border-radius:50%}
+.hex-picker::-webkit-color-swatch{border:none;border-radius:50%}
+.hex-picker-value{font-family:'SF Mono','Fira Code',monospace;font-size:.92rem;font-weight:600;color:var(--text-secondary);letter-spacing:.5px}
+.hex-picker-reset{background:none;border:1px solid var(--border);border-radius:50%;width:22px;height:22px;font-size:.8rem;color:var(--text-tertiary);cursor:pointer;line-height:1;transition:all .2s}
+.hex-picker-reset:hover{border-color:var(--gold);color:var(--gold-dark);transform:rotate(-45deg)}
+.hex-picker-hint{font-size:.88rem;color:var(--text-tertiary);font-style:italic;margin-top:.5rem}
+
+/* ══════════════════════════════════════
+   CONCERNS
+══════════════════════════════════════ */
+.concerns-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.8rem}
+.concern-chip{
+  display:flex;align-items:center;justify-content:center;gap:.45rem;
+  background:var(--glass-strong);border:1.5px solid var(--glass-border);
+  color:var(--text-secondary);padding:.75rem 1rem;border-radius:var(--rs);
+  font-size:1rem;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;
+  cursor:pointer;transition:all .3s var(--ease);user-select:none;
+  backdrop-filter:blur(8px);box-shadow:var(--sh-xs);
+}
+.concern-chip:hover{background:var(--surface);transform:translateY(-3px);box-shadow:var(--sh-md);border-color:var(--rose-muted)}
+.concern-chip.active{
+  background:var(--g-accent);border-color:var(--rose);
+  color:#fff;font-weight:600;
+  box-shadow:var(--sh-glow);transform:translateY(-2px);
+}
+.concern-chip.detected{background:var(--gold-faint);border-color:var(--gold);position:relative}
+.concern-chip.detected::after{content:'detected';position:absolute;top:-7px;right:-4px;background:var(--gold);color:#fff;font-size:.52rem;padding:.1rem .4rem;border-radius:var(--rp);font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+
+/* CNN result rows */
+.cnn-row{display:flex;align-items:center;gap:.7rem;margin-top:.6rem;padding-top:.6rem;border-top:1px dashed var(--border);font-size:.76rem;color:var(--text-secondary)}
+.cnn-tag{background:var(--cream);border:1px solid var(--border);border-radius:var(--rp);padding:.18rem .7rem;font-weight:600;color:var(--text-primary)}
+.cnn-conf{font-size:.68rem;color:var(--text-tertiary);font-style:italic}
+
+/* dual-signal row */
+.dual-row{margin-top:.8rem;padding-top:.8rem;border-top:1px dashed var(--border);font-size:.92rem}
+.dual-header{font-size:.88rem;color:var(--text-tertiary);margin-bottom:.5rem;font-style:italic}
+.dual-signals{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.6rem}
+.dual-tag{background:var(--cream);border:1px solid var(--border);border-radius:var(--rp);padding:.35rem .9rem;color:var(--text-secondary);font-size:.92rem}
+.dual-verdict{border-radius:var(--rs);padding:.6rem .9rem;font-size:.9rem;line-height:1.6}
+.dual-agree{background:#E8F5E4;border:1px solid #88C878;color:#2A5018}
+.dual-mixed{background:#FFF3E0;border:1px solid #E0B060;color:#704818}
+
+/* ══════════════════════════════════════
+   BUDGET
+══════════════════════════════════════ */
+.toggle-row{display:flex;align-items:center;gap:.7rem;cursor:pointer;margin-bottom:.9rem;color:var(--text-secondary);font-size:1rem}
+.toggle-row input[type="checkbox"]{accent-color:var(--rose);width:16px;height:16px;cursor:pointer}
+.budget-slider-wrap{display:none}
+.budget-slider-wrap.open{display:block}
+input[type="range"]{-webkit-appearance:none;width:100%;height:4px;background:linear-gradient(to right,var(--rose) 0%,var(--rose) var(--pct,25%),var(--sand) var(--pct,25%));border-radius:var(--rp);outline:none;cursor:pointer}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--g-accent);box-shadow:0 2px 8px rgba(139,34,82,.3);cursor:pointer;transition:transform .15s}
+input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+.budget-row{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-tertiary);margin-top:.3rem}
+.budget-val{text-align:center;font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--rose);margin-top:.5rem}
+
+/* ══════════════════════════════════════
+   CATEGORY PICKER
+══════════════════════════════════════ */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.8rem;margin-bottom:1rem}
+.cat-chip{
+  display:flex;align-items:center;justify-content:center;gap:.45rem;
+  background:var(--glass-strong);border:1.5px solid var(--glass-border);
+  color:var(--text-secondary);padding:.75rem 1rem;border-radius:var(--rs);
+  font-size:1rem;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;
+  cursor:pointer;transition:all .3s var(--ease);user-select:none;
+  backdrop-filter:blur(8px);box-shadow:var(--sh-xs);
+}
+.cat-chip:hover{background:var(--surface);transform:translateY(-3px);box-shadow:var(--sh-md);border-color:var(--rose-muted)}
+.cat-chip.active{
+  background:var(--g-accent);border-color:var(--rose);
+  color:#fff;font-weight:600;
+  box-shadow:var(--sh-glow);transform:translateY(-2px);
+}
+.cat-controls{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:.3rem}
+.cat-mini-btn{background:none;border:1px solid var(--border);border-radius:var(--rp);padding:.3rem .9rem;color:var(--text-tertiary);font-size:.82rem;cursor:pointer;transition:all .15s}
+.cat-mini-btn:hover{border-color:var(--rose-muted);color:var(--rose)}
+.cat-status{font-size:.85rem;color:var(--text-tertiary);font-style:italic}
+
+/* ══════════════════════════════════════
+   CTA BUTTONS
+══════════════════════════════════════ */
+.cta-row{display:flex;flex-direction:column;gap:.8rem;margin-top:.5rem}
+.cta-btn{
+  width:100%;padding:1.2rem 2rem;
+  background:var(--g-cta);color:var(--text-inverse);
+  border:none;border-radius:var(--rp);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.3rem;font-weight:500;letter-spacing:.3px;
+  cursor:pointer;box-shadow:var(--sh-glow);
+  transition:all .35s var(--ease);position:relative;
+  overflow:hidden;
+}
+.cta-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 40%,rgba(255,255,255,.05) 100%);
+}
+.cta-btn::after{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(circle,rgba(255,255,255,.12),transparent 60%);
+  opacity:0;transition:opacity .4s;
+}
+.cta-btn:hover:not(:disabled){
+  transform:translateY(-3px);
+  box-shadow:0 10px 40px rgba(194,24,91,.30);
+}
+.cta-btn:hover:not(:disabled)::after{opacity:1}
+.cta-btn:active:not(:disabled){transform:translateY(-1px)}
+.cta-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.cta-secondary{
+  background:var(--glass-strong);color:var(--rose);
+  border:1.5px solid var(--rose-muted);box-shadow:var(--sh-sm);
+  backdrop-filter:blur(8px);
+}
+.cta-secondary:hover:not(:disabled){
+  background:var(--surface);color:var(--rose-dark);
+  transform:translateY(-3px);box-shadow:var(--sh-lg);
+}
+.cta-secondary::before{display:none}
+.cta-secondary::after{display:none}
+
+.spinner{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .65s linear infinite;vertical-align:middle;margin-right:.5rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Step navigation buttons */
+.step-nav{display:flex;gap:.8rem;margin-top:2rem}
+.step-nav-btn{
+  flex:1;padding:.9rem 1.5rem;border-radius:var(--rp);
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:1.15rem;font-weight:500;
+  cursor:pointer;transition:all .25s var(--ease);
+}
+.step-nav-btn.prev{
+  background:var(--glass-strong);border:1.5px solid var(--glass-border);color:var(--text-secondary);
+  backdrop-filter:blur(8px);
+}
+.step-nav-btn.prev:hover{background:var(--surface);box-shadow:var(--sh-sm)}
+.step-nav-btn.next{
+  background:var(--g-accent);border:none;color:var(--text-inverse);
+  box-shadow:var(--sh-glow);
+}
+.step-nav-btn.next:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(139,34,82,.25)}
+
+/* ══════════════════════════════════════
+   ROUTINE TIMELINE
+══════════════════════════════════════ */
+.routine-header{
+  background:var(--g-accent-warm);color:var(--text-inverse);
+  border-radius:var(--r);padding:2rem 2.2rem;margin-bottom:1.8rem;
+  box-shadow:var(--sh-xl);position:relative;overflow:hidden;
+}
+.routine-header::before{
+  content:'';position:absolute;right:-2rem;bottom:-2rem;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(255,255,255,.06);
+}
+.routine-header::after{
+  content:'';position:absolute;left:-3rem;top:-3rem;
+  width:120px;height:120px;border-radius:50%;
+  background:rgba(201,169,110,.08);
+}
+.routine-kicker{font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;opacity:.75;margin-bottom:.4rem;font-weight:500}
+.routine-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.9rem;font-weight:500;margin-bottom:.7rem;letter-spacing:-.03em}
+.routine-summary{display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.82rem;opacity:.9;font-weight:300}
+.routine-summary strong{font-family:'Cormorant Garamond',Georgia,serif;font-size:1rem;font-weight:600}
+
+.timeline{position:relative;padding-left:2.8rem;margin-bottom:1.5rem}
+.timeline::before{content:'';position:absolute;left:1.15rem;top:0;bottom:0;width:1.5px;background:linear-gradient(to bottom,var(--gold),var(--rose),var(--gold))}
+
+.step-item{
+  position:relative;margin-bottom:1.3rem;
+  background:var(--glass-strong);border:1px solid var(--glass-border);
+  border-radius:var(--rs);box-shadow:var(--sh-sm);overflow:hidden;
+  backdrop-filter:blur(12px);
+  transition:transform .25s var(--ease),box-shadow .25s;
+  cursor:pointer;opacity:0;animation:cardIn .5s var(--ease-out) forwards;
+}
+.step-item:hover{transform:translateX(4px);box-shadow:var(--sh-lg)}
+.step-bullet{
+  position:absolute;left:-2.85rem;top:1rem;
+  width:2.3rem;height:2.3rem;border-radius:50%;
+  background:var(--g-accent);color:var(--text-inverse);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',Georgia,serif;font-weight:700;font-size:.9rem;
+  box-shadow:0 3px 10px rgba(139,34,82,.25);border:3px solid #fff;z-index:2;
+}
+
+.step-content{display:flex;align-items:stretch;gap:1.2rem}
+.step-img{flex:0 0 120px;height:120px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-radius:var(--rs) 0 0 var(--rs)}
+.step-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.step-img-emoji{font-size:2.8rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,.1))}
+.step-body{flex:1;padding:1rem 1.2rem 1rem 0;min-width:0}
+.step-cat{font-size:.75rem;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:.15rem}
+.step-name{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.2rem;font-weight:500;color:var(--text-primary);margin-bottom:.15rem;line-height:1.3}
+.step-brand{font-size:.88rem;color:var(--text-tertiary);margin-bottom:.35rem}
+.step-instruction{font-size:.9rem;color:var(--text-secondary);font-style:italic;line-height:1.6;margin-bottom:.5rem}
+.step-meta{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;font-size:.85rem}
+.step-price{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;font-weight:500;color:var(--rose)}
+.step-rating{color:var(--rose-muted)}
+.step-tag{background:var(--cream);color:var(--text-secondary);border-radius:var(--rp);padding:.15rem .6rem;font-size:.78rem;font-weight:500}
+
+.routine-actions{display:flex;gap:.8rem;flex-wrap:wrap}
+.routine-add-all{
+  flex:1;min-width:200px;padding:.9rem;
+  background:var(--g-cta);color:var(--text-inverse);
+  border:none;border-radius:var(--rp);
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:.95rem;font-weight:600;
+  cursor:pointer;box-shadow:var(--sh-glow);transition:all .25s var(--ease);
+}
+.routine-add-all:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(139,34,82,.25)}
+
+/* ══════════════════════════════════════
+   RESULTS
+══════════════════════════════════════ */
+#results{display:none;margin-top:2.5rem}
+#results.open{display:block;animation:stepFadeIn .5s var(--ease-out) forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+.results-divider{text-align:center;position:relative;margin-bottom:2.5rem}
+.results-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)}
+.results-divider span{
+  position:relative;background:var(--bg);padding:0 1.2rem;
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:1.15rem;
+  color:var(--rose);font-weight:500;
+}
+
+.skin-badge{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--rp);padding:.45rem 1.1rem;
+  font-size:.82rem;color:var(--text-secondary);margin-bottom:1.5rem;
+}
+.skin-badge strong{color:var(--rose)}
+
+/*Look hero*/
+.look-hero{
+  background:var(--g-accent-warm);border-radius:var(--r);
+  padding:2.2rem 2rem;color:var(--text-inverse);
+  margin-bottom:2rem;box-shadow:var(--sh-xl);
+  position:relative;overflow:hidden;
+}
+.look-hero::before{content:'';position:absolute;right:-2rem;bottom:-2rem;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.05)}
+.look-kicker{font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;opacity:.7;margin-bottom:.4rem;font-weight:500}
+.look-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.1rem;font-weight:500;line-height:1.15;margin-bottom:.7rem;letter-spacing:-.03em}
+.look-badges{display:flex;gap:.5rem;flex-wrap:wrap}
+.look-badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:var(--rp);padding:.25rem .9rem;font-size:.75rem;backdrop-filter:blur(4px);font-weight:400}
+
+/*Category filters*/
+.filter-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem;align-items:center}
+.filter-label{font-size:.68rem;color:var(--text-tertiary);letter-spacing:1px;text-transform:uppercase;margin-right:.2rem;font-weight:600}
+.filter-btn{
+  background:var(--glass);border:1.5px solid var(--glass-border);
+  color:var(--text-secondary);border-radius:var(--rp);
+  padding:.3rem .9rem;font-size:.78rem;font-family:inherit;
+  font-weight:500;cursor:pointer;transition:all .2s;backdrop-filter:blur(6px);
+}
+.filter-btn:hover{background:var(--glass-strong);box-shadow:var(--sh-xs)}
+.filter-btn.active{background:var(--g-accent);border-color:var(--rose);color:#fff;font-weight:600;box-shadow:var(--sh-glow)}
+
+/*Products grid*/
+.products-heading{
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:1.4rem;
+  color:var(--text-primary);margin-bottom:1rem;
+  display:flex;align-items:center;gap:.5rem;font-weight:500;
+}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem;margin-bottom:2rem}
+
+/* ══════════════════════════════════════
+   PRODUCT CARD
+══════════════════════════════════════ */
+.product-card{
+  background:var(--glass-strong);border:1px solid var(--glass-border);
+  border-radius:var(--rs);box-shadow:var(--sh-sm);
+  cursor:pointer;display:flex;flex-direction:column;
+  transition:transform .3s var(--ease),box-shadow .3s;
+  overflow:hidden;backdrop-filter:blur(12px);
+  opacity:0;animation:cardIn .45s var(--ease-out) forwards;
+}
+.product-card:hover{transform:translateY(-6px);box-shadow:var(--sh-lg)}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.prod-img-area{
+  height:160px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.prod-cat-emoji{font-size:2.8rem;z-index:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.1))}
+.prod-real-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;transition:transform .4s var(--ease)}
+.product-card:hover .prod-real-img{transform:scale(1.03)}
+.modal-real-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block}
+.prod-brand-chip{
+  position:absolute;bottom:.5rem;left:50%;transform:translateX(-50%);
+  background:rgba(255,255,255,.85);backdrop-filter:blur(6px);
+  border-radius:var(--rp);padding:.2rem .7rem;font-size:.65rem;
+  font-weight:600;white-space:nowrap;color:var(--text-primary);
+  max-width:90%;overflow:hidden;text-overflow:ellipsis;letter-spacing:.3px;
+}
+.prod-wish-btn{
+  position:absolute;top:.5rem;right:.5rem;z-index:2;
+  background:rgba(255,255,255,.85);backdrop-filter:blur(4px);
+  border:none;border-radius:50%;width:28px;height:28px;
+  font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .25s var(--ease);line-height:1;color:var(--text-tertiary);
+}
+.prod-wish-btn:hover{background:#fff;transform:scale(1.1);color:var(--rose)}
+.prod-wish-btn.wishlisted{color:var(--rose)}
+
+.prod-body{padding:.9rem 1rem 1rem;display:flex;flex-direction:column;flex:1}
+.prod-cat-label{font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:.2rem;font-weight:500}
+.prod-name{font-family:'Cormorant Garamond',Georgia,serif;font-size:1rem;font-weight:500;color:var(--text-primary);margin-bottom:.2rem;line-height:1.3}
+.prod-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem}
+.prod-price{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.15rem;font-weight:500;color:var(--rose)}
+.prod-stars{color:var(--gold);font-size:.72rem}
+.prod-finish-tag{display:inline-block;background:var(--cream);color:var(--text-secondary);border-radius:var(--rp);padding:.12rem .5rem;font-size:.65rem;margin-bottom:.5rem;font-weight:500}
+.prod-reason{font-size:.72rem;color:var(--text-tertiary);font-style:italic;line-height:1.5;border-top:1px solid var(--border-light);padding-top:.45rem;margin-top:auto}
+
+/*Skeleton*/
+.skeleton-card{background:var(--glass-strong);border-radius:var(--rs);overflow:hidden;border:1px solid var(--glass-border);backdrop-filter:blur(12px)}
+.skel-img{height:160px;background:linear-gradient(90deg,rgba(255,255,255,.3) 25%,rgba(255,255,255,.5) 50%,rgba(255,255,255,.3) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+.skel-body{padding:.9rem 1rem}
+.skel-line{height:8px;border-radius:6px;margin-bottom:.6rem;background:linear-gradient(90deg,rgba(255,255,255,.3) 25%,rgba(255,255,255,.5) 50%,rgba(255,255,255,.3) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+.skel-line.w70{width:70%}.skel-line.w50{width:50%}.skel-line.w90{width:90%}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/*Alt looks*/
+.alt-section{background:var(--glass-strong);border:1px solid var(--glass-border);border-radius:var(--rs);padding:1.2rem 1.4rem;backdrop-filter:blur(12px)}
+.alt-title{font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:.6rem;font-weight:600}
+.alt-chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.alt-chip{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--rp);padding:.3rem 1rem;font-size:.78rem;color:var(--text-secondary);transition:all .2s;font-weight:500;backdrop-filter:blur(4px)}
+.alt-chip:hover{background:var(--glass-strong);transform:translateY(-2px);box-shadow:var(--sh-sm)}
+
+/* ══════════════════════════════════════
+   MODAL
+══════════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(74,26,46,.35);
+  backdrop-filter:blur(12px);z-index:400;
+  display:flex;align-items:center;justify-content:center;
+  padding:1rem;
+  opacity:0;pointer-events:none;transition:opacity .3s var(--ease);
+}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+
+.modal{
+  background:var(--surface);border-radius:var(--r);
+  width:100%;max-width:580px;max-height:90vh;overflow-y:auto;
+  box-shadow:var(--sh-xl);
+  transform:scale(.96) translateY(12px);
+  transition:transform .35s var(--ease-out);
+  position:relative;
+}
+.modal-overlay.open .modal{transform:scale(1) translateY(0)}
+
+.modal-close{
+  position:absolute;top:1rem;right:1rem;z-index:2;
+  background:rgba(255,255,255,.85);backdrop-filter:blur(4px);
+  border:1px solid var(--border);border-radius:50%;
+  width:32px;height:32px;font-size:.95rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-secondary);transition:all .2s;
+}
+.modal-close:hover{background:var(--surface);transform:rotate(90deg);border-color:var(--rose-muted)}
+
+.modal-img{
+  height:380px;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--bg-light),var(--bg-deep));
+}
+.modal-img::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:80px;
+  background:linear-gradient(to top,var(--surface),transparent);
+  pointer-events:none;
+}
+.modal-img img{transition:transform .4s var(--ease)}
+.modal-img:hover img{transform:scale(1.03)}
+.modal-img-emoji{font-size:5rem;filter:drop-shadow(0 4px 12px rgba(0,0,0,.12))}
+
+.modal-body{padding:2rem 2.2rem 2.2rem}
+.modal-kicker{font-size:.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:.3rem;font-weight:500}
+.modal-name{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.8rem;font-weight:500;color:var(--text-primary);margin-bottom:.25rem;line-height:1.2;letter-spacing:-.02em}
+.modal-brand{font-size:1rem;color:var(--text-tertiary);margin-bottom:1.2rem}
+.modal-meta-row{display:flex;align-items:center;gap:1.2rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.modal-price{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.6rem;font-weight:500;color:var(--rose)}
+.modal-stars{color:var(--rose-muted);font-size:.95rem}
+.modal-tag{background:var(--cream);color:var(--text-secondary);border-radius:var(--rp);padding:.25rem .8rem;font-size:.85rem;font-weight:500}
+
+.modal-section{margin-bottom:1.2rem}
+.modal-section-title{font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:.5rem;font-weight:600}
+.modal-reason{font-size:.92rem;color:var(--text-primary);line-height:1.75;background:var(--surface-warm);border-left:3px solid var(--gold);padding:.7rem 1rem;border-radius:0 var(--rs) var(--rs) 0}
+.ingr-chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.ingr-chip{background:var(--cream);color:var(--text-secondary);border:1px solid var(--border);border-radius:var(--rp);padding:.2rem .7rem;font-size:.72rem;display:inline-flex;align-items:center;gap:.3rem;font-weight:500}
+.ingr-chip.ingr-matched{background:linear-gradient(135deg,#E8FFD6,#C6F1A8);border-color:#7EB84A;color:#2A5018;font-weight:600;cursor:help}
+.ingr-treats{font-size:.58rem;font-weight:400;font-style:italic;color:#3A6A18;background:rgba(255,255,255,.7);padding:.1rem .4rem;border-radius:var(--rp);text-transform:lowercase}
+
+/* Concern match callout in modal */
+.concern-callout{background:linear-gradient(135deg,#F0FFF0,#DAF5D0);border:1.5px solid #88C878;border-left:3px solid #4EAA3E;border-radius:var(--rs);padding:.85rem 1.1rem;margin-bottom:1.2rem}
+.concern-callout-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:.9rem;font-weight:600;color:#2A5018;margin-bottom:.4rem}
+.concern-callout-body{font-size:.76rem;color:#3A6A18;line-height:1.6}
+.concern-callout-body strong{color:#1A3A08}
+.callout-chip{display:inline-block;background:#fff;border:1px solid #88C878;border-radius:var(--rp);padding:.18rem .55rem;font-size:.68rem;color:#2A5018;font-weight:600;margin:.25rem .25rem 0 0}
+
+/*Shade matching (foundation)*/
+.shade-section{margin-bottom:1.2rem;background:var(--surface-warm);border:1px solid var(--border);border-radius:var(--rs);padding:1rem 1.1rem}
+.shade-rec-row{display:flex;align-items:center;gap:.8rem;margin-bottom:.85rem;padding-bottom:.7rem;border-bottom:1px dashed var(--border)}
+.shade-rec-circle{width:44px;height:44px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--gold),var(--sh-sm);flex-shrink:0}
+.shade-rec-label{flex:1;min-width:0}
+.shade-rec-title{font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:.15rem;font-weight:600}
+.shade-rec-name{font-family:'Cormorant Garamond',Georgia,serif;font-size:.92rem;font-weight:600;color:var(--text-primary)}
+.shade-rec-meta{font-size:.7rem;color:var(--text-tertiary);margin-top:.1rem}
+.shade-rec-empty{font-size:.76rem;color:var(--text-tertiary);font-style:italic}
+
+/* Nearby shades list (replaces dot grid) */
+.shade-nearby-title{font-size:.85rem;color:var(--text-tertiary);font-style:italic;margin-top:.8rem;margin-bottom:.5rem}
+.shade-nearby-list{display:flex;flex-direction:column;gap:.4rem}
+.shade-nearby{
+  display:flex;align-items:center;gap:.7rem;
+  padding:.5rem .7rem;border-radius:var(--rs);
+  background:var(--glass);transition:background .2s;
+}
+.shade-nearby:hover{background:var(--glass-strong)}
+.shade-nearby-match{background:var(--glass-strong);border:1.5px solid var(--rose-muted)}
+.shade-nearby-dot{width:32px;height:32px;border-radius:50%;border:3px solid #fff;box-shadow:var(--sh-sm);flex-shrink:0}
+.shade-nearby-info{display:flex;flex-direction:column}
+.shade-nearby-name{font-size:.92rem;font-weight:500;color:var(--text-primary)}
+.shade-nearby-hex{font-size:.78rem;color:var(--text-tertiary)}
+
+/* Shade strips on cards */
+.shade-strip{display:flex;align-items:center;gap:.5rem;margin:.5rem 0 .35rem;font-size:.75rem;color:var(--text-secondary);padding:.4rem .65rem;background:var(--surface-warm);border:1px solid var(--border);border-radius:var(--rs)}
+.shade-strip em{font-style:italic;color:var(--text-tertiary);font-size:.68rem}
+.shade-strip-empty{color:var(--text-tertiary);font-style:italic;justify-content:center;font-size:.7rem}
+
+/* Color advisor strip on cards */
+.color-strip{display:flex;align-items:center;gap:.5rem;margin:.5rem 0 .35rem;font-size:.75rem;color:var(--text-secondary);padding:.4rem .65rem;border-radius:var(--rs);border:1px solid var(--border)}
+.color-strip-dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--taupe),0 1px 3px rgba(0,0,0,.15);flex-shrink:0}
+.color-strip.cm-great  {background:linear-gradient(135deg,#E7FFD9,#C6F1A8);border-color:#9BD66E;color:#3A6014}
+.color-strip.cm-decent {background:linear-gradient(135deg,#FFF5E0,#FFE19A);border-color:#F0B94A;color:#7A4F00}
+.color-strip.cm-skip   {background:linear-gradient(135deg,#FFE7E7,#FFC6C6);border-color:#E67878;color:#7A1818}
+.cm-verdict{text-transform:uppercase;letter-spacing:.5px;font-size:.62rem;font-weight:700}
+.palette-tag{display:inline-block;background:rgba(255,255,255,.6);border:1px solid currentColor;border-radius:3px;padding:.05rem .35rem;font-size:.58rem;font-weight:700;letter-spacing:.5px;margin-right:.3rem;vertical-align:middle}
+
+/* Perfume scent family strip */
+.perfume-strip{display:flex;align-items:center;gap:.55rem;margin:.5rem 0 .35rem;padding:.4rem .6rem;background:linear-gradient(135deg,#FFF8F0,#FDE6D3);border:1.5px solid;border-radius:var(--rs)}
+.perfume-strip-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.perfume-strip-text{flex:1;min-width:0;font-size:.75rem;color:var(--text-primary)}
+.perfume-strip-family strong{font-size:.82rem}
+.perfume-unisex{display:inline-block;background:var(--cream);color:var(--text-secondary);border-radius:3px;padding:.05rem .4rem;font-size:.58rem;font-weight:700;letter-spacing:.5px;margin-left:.3rem;vertical-align:middle}
+
+/* Concern match badge on cards */
+.concern-badge{display:flex;align-items:center;gap:.4rem;margin:.5rem 0 .35rem;padding:.4rem .65rem;background:linear-gradient(135deg,#E8FFD9,#C6F1A8);border:1px solid #88C878;border-radius:var(--rs);font-size:.72rem;color:#2A5018;line-height:1.35;cursor:help}
+.concern-badge strong{color:#1A3A08;text-transform:capitalize}
+.concern-badge-count{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;background:#4EAA3E;color:#fff;border-radius:50%;font-size:.65rem;font-weight:800;flex-shrink:0}
+
+/* Color advisor section in modal */
+.color-rec-row{display:flex;align-items:center;gap:.8rem;margin-bottom:.85rem;padding-bottom:.7rem;border-bottom:1px dashed var(--border)}
+.color-rec-circle{width:44px;height:44px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--gold),var(--sh-sm);flex-shrink:0}
+.color-rec-label{flex:1;min-width:0}
+.family-grid-label{font-size:.76rem;color:var(--text-secondary);margin-top:.5rem;margin-bottom:.5rem;font-style:italic}
+.family-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.5rem}
+.family-chip{display:flex;align-items:center;gap:.35rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--rp);padding:.22rem .5rem .22rem .22rem}
+.family-circle{width:20px;height:20px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--border),0 1px 2px rgba(0,0,0,.1);flex-shrink:0}
+.family-name{font-size:.7rem;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shade-source-tag{display:inline-block;background:var(--cream);color:var(--text-secondary);font-size:.58rem;padding:.1rem .5rem;border-radius:var(--rp);margin-left:.4rem;letter-spacing:.5px;text-transform:uppercase;font-weight:600;font-family:'DM Sans',sans-serif}
+.shade-rec-desc{margin-top:.4rem;padding:.4rem .65rem;background:rgba(255,255,255,.7);border-left:2px solid var(--gold);font-size:.72rem;color:var(--text-secondary);font-style:italic;border-radius:0 var(--rs) var(--rs) 0}
+
+/* No-shade-data warning */
+.shade-noinfo{background:linear-gradient(135deg,#FFF0F5,#FFE0EC);border:1px solid var(--border);border-left:3px solid var(--rose-muted);border-radius:var(--rs);padding:.85rem 1rem;margin-bottom:.85rem}
+.shade-noinfo-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:.88rem;font-weight:600;color:var(--rose-dark);margin-bottom:.4rem}
+.shade-noinfo-body{font-size:.76rem;color:var(--text-secondary);line-height:1.6}
+.shade-noinfo-body strong{color:var(--text-primary)}
+.shade-rec-reference{opacity:.95;background:rgba(255,255,255,.5);border-radius:var(--rs);padding:.5rem}
+.shade-rec-tip{margin-top:.4rem;padding:.35rem .55rem;background:var(--cream);border:1px dashed var(--border);border-radius:var(--rs);font-size:.68rem;color:var(--text-secondary);font-style:italic}
+.shade-source-tag.warn{background:var(--cream);color:var(--rose-dark);border:1px solid var(--border)}
+.shade-strip-dot{width:17px;height:17px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--gold),0 1px 3px rgba(0,0,0,.15);flex-shrink:0}
+.shade-strip-name{font-weight:600;color:var(--text-secondary)}
+
+/*Reviews*/
+.reviews-section{margin-bottom:1.2rem}
+.review-item{background:var(--surface-warm);border:1px solid var(--border-light);border-radius:var(--rs);padding:.75rem 1rem;margin-bottom:.6rem}
+.review-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem;flex-wrap:wrap;gap:.4rem}
+.review-stars{color:var(--gold);font-size:.78rem}
+.review-meta{font-size:.7rem;color:var(--text-tertiary)}
+.review-title{font-size:.8rem;font-weight:600;color:var(--text-primary);margin-bottom:.2rem}
+.review-body{font-size:.76rem;color:var(--text-secondary);line-height:1.6;font-style:italic}
+
+.modal-actions{display:flex;gap:.8rem;margin-top:1.5rem}
+.modal-wish-btn{flex:1;padding:.7rem;background:var(--surface-warm);border:1.5px solid var(--border);border-radius:var(--rp);color:var(--text-secondary);font-family:inherit;font-size:.82rem;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.modal-wish-btn:hover{border-color:var(--rose-muted);background:var(--rose-faint)}
+.modal-wish-btn.wishlisted{background:var(--rose-faint);border-color:var(--rose-muted);color:var(--rose)}
+.modal-cart-btn{
+  flex:2;padding:.75rem;background:var(--g-cta);border:none;
+  border-radius:var(--rp);color:var(--text-inverse);
+  font-family:'Cormorant Garamond',Georgia,serif;font-size:.9rem;font-weight:600;
+  cursor:pointer;box-shadow:var(--sh-glow);transition:all .25s var(--ease);
+}
+.modal-cart-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(139,34,82,.25)}
+.modal-cart-btn.in-cart{background:linear-gradient(135deg,#43A047,#1B5E20)}
+
+/* ══════════════════════════════════════
+   WISHLIST PANEL
+══════════════════════════════════════ */
+.cart-overlay{position:fixed;inset:0;background:rgba(74,26,46,.25);z-index:300;opacity:0;pointer-events:none;transition:opacity .3s}
+.cart-overlay.open{opacity:1;pointer-events:auto}
+
+.cart-panel{
+  position:fixed;top:0;right:0;height:100%;width:360px;max-width:92vw;
+  background:var(--surface);box-shadow:-4px 0 40px rgba(45,34,38,.12);
+  z-index:301;display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform .35s var(--ease-out);
+}
+.cart-panel.open{transform:translateX(0)}
+
+.cart-header{padding:1.5rem 1.5rem 1rem;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between}
+.cart-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.1rem;color:var(--text-primary);font-weight:600}
+.cart-close-btn{background:none;border:none;font-size:1.2rem;color:var(--text-tertiary);cursor:pointer;line-height:1;transition:color .15s,transform .2s}
+.cart-close-btn:hover{color:var(--text-primary);transform:rotate(90deg)}
+
+.cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem}
+.cart-empty{text-align:center;padding:3rem 1rem;color:var(--text-tertiary);font-style:italic;font-size:.88rem}
+
+.cart-item{display:flex;align-items:center;gap:.8rem;padding:.75rem 0;border-bottom:1px solid var(--border-light)}
+.cart-item-img{width:46px;height:46px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;overflow:hidden;position:relative}
+.cart-item-img img{width:100%;height:100%;object-fit:cover}
+.cart-item-img .cart-item-emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{font-size:.8rem;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-brand{font-size:.7rem;color:var(--text-tertiary)}
+.cart-item-price{font-family:'Cormorant Garamond',Georgia,serif;font-size:.88rem;font-weight:600;color:var(--rose)}
+.cart-item-remove{background:none;border:none;color:var(--text-tertiary);cursor:pointer;font-size:.9rem;line-height:1;padding:.2rem;transition:color .15s}
+.cart-item-remove:hover{color:var(--rose)}
+
+.cart-footer{padding:1.2rem 1.5rem;border-top:1px solid var(--border-light)}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.cart-total-label{font-size:.8rem;color:var(--text-tertiary);letter-spacing:.5px;text-transform:uppercase;font-weight:500}
+.cart-total-val{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.3rem;font-weight:600;color:var(--text-primary)}
+.cart-clear-btn{width:100%;padding:.5rem;background:none;border:1px solid var(--border);border-radius:var(--rp);color:var(--text-tertiary);font-size:.78rem;cursor:pointer;transition:all .15s}
+.cart-clear-btn:hover{border-color:var(--rose-muted);color:var(--rose)}
+
+/*Error*/
+.error-box{background:var(--surface-warm);border:1px solid var(--border);border-left:3px solid var(--rose);border-radius:var(--rs);padding:1.1rem 1.3rem;color:var(--text-primary);font-size:.88rem}
+.error-box small{display:block;margin-top:.4rem;color:var(--text-tertiary)}
+
+/* ══════════════════════════════════════
+   INTRO / LANDING SECTION
+══════════════════════════════════════ */
+.intro{
+  max-width:820px;margin:0 auto;padding:3.5rem 2rem 2rem;position:relative;z-index:1;
+}
+
+.intro-headline{
+  text-align:center;margin-bottom:3rem;
+}
+.intro-headline h2{
+  font-size:2.2rem;font-weight:500;color:var(--text-primary);
+  line-height:1.2;letter-spacing:-.02em;margin-bottom:.8rem;
+}
+.intro-headline p{
+  font-size:1.1rem;font-weight:300;color:var(--text-secondary);
+  max-width:560px;margin:0 auto;line-height:1.8;
+}
+
+/* Three-column feature cards */
+.intro-features{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;
+  margin-bottom:3rem;
+}
+.intro-card{
+  background:var(--glass-strong);border:1px solid var(--glass-border);
+  border-radius:var(--r);padding:2rem 1.5rem;
+  text-align:center;backdrop-filter:blur(12px);
+  box-shadow:var(--sh-sm);
+  transition:transform .3s var(--ease),box-shadow .3s;
+}
+.intro-card:hover{transform:translateY(-4px);box-shadow:var(--sh-lg)}
+.intro-card-icon{font-size:2.5rem;margin-bottom:.8rem;display:block}
+.intro-card h3{
+  font-size:1.3rem;font-weight:500;color:var(--text-primary);
+  margin-bottom:.5rem;
+}
+.intro-card p{
+  font-size:.95rem;font-weight:300;color:var(--text-tertiary);
+  line-height:1.7;
+}
+
+/* How it works — numbered steps */
+.intro-how{
+  margin-bottom:3rem;
+}
+.intro-how-title{
+  text-align:center;font-size:1.5rem;font-weight:500;
+  color:var(--text-primary);margin-bottom:2rem;
+}
+.intro-steps{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;
+  position:relative;
+}
+.intro-step{
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  position:relative;z-index:1;
+}
+.intro-step-num{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--glass-strong);border:2px solid var(--rose-muted);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;font-weight:500;color:var(--rose);
+  box-shadow:var(--sh-sm);
+}
+.intro-step-label{
+  font-size:.85rem;font-weight:500;color:var(--text-secondary);
+  text-align:center;line-height:1.4;
+}
+
+/* CTA to start */
+.intro-cta-wrap{text-align:center;margin-bottom:1rem}
+.intro-cta{
+  display:inline-block;padding:1.1rem 3.5rem;
+  background:var(--g-cta);color:#fff;border:none;border-radius:var(--rp);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.3rem;font-weight:500;cursor:pointer;
+  box-shadow:var(--sh-glow);transition:all .35s var(--ease);
+  position:relative;overflow:hidden;
+}
+.intro-cta::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 40%);
+}
+.intro-cta:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(159,76,96,.30)}
+.intro-cta-sub{
+  text-align:center;font-size:.88rem;color:var(--text-tertiary);
+  font-style:italic;margin-top:.6rem;
+}
+
+/* Divider ornament */
+.intro-divider{
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+  margin:2.5rem 0 1rem;color:var(--rose-muted);font-size:.8rem;letter-spacing:.4em;
+}
+.intro-divider::before,.intro-divider::after{
+  content:'';width:60px;height:1px;
+  background:linear-gradient(to right,transparent,var(--rose-muted),transparent);
+}
+
+/*Perfume promo in intro*/
+.intro-perfume{
+  margin-top:1rem;
+}
+.intro-perfume-inner{
+  display:grid;grid-template-columns:1fr 1fr;gap:2rem;
+  align-items:center;
+  background:var(--glass-strong);border:1px solid var(--glass-border);
+  border-radius:var(--r);padding:2.5rem;
+  backdrop-filter:blur(12px);box-shadow:var(--sh-md);
+}
+.intro-perfume-text h3{
+  font-size:1.7rem;font-weight:500;color:var(--text-primary);
+  margin-bottom:.6rem;line-height:1.2;
+}
+.intro-perfume-text p{
+  font-size:1rem;font-weight:300;color:var(--text-tertiary);
+  line-height:1.8;margin-bottom:1.2rem;
+}
+.intro-perfume-btn{
+  display:inline-block;padding:.8rem 2rem;
+  background:var(--glass);border:1.5px solid var(--rose-muted);
+  border-radius:var(--rp);color:var(--rose);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.1rem;font-weight:500;text-decoration:none;
+  transition:all .3s var(--ease);
+}
+.intro-perfume-btn:hover{
+  background:var(--g-accent);color:#fff;border-color:var(--rose);
+  transform:translateY(-2px);box-shadow:var(--sh-glow);
+}
+.intro-perfume-visual{
+  display:flex;flex-direction:column;align-items:center;gap:.8rem;
+}
+.intro-perfume-icon{font-size:4rem}
+.intro-scent-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}
+.intro-scent-pill{
+  display:flex;align-items:center;gap:.3rem;
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--rp);padding:.35rem .8rem;font-size:.85rem;
+  color:var(--text-secondary);
+}
+.intro-scent-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+@media(max-width:640px){
+  .intro-perfume-inner{grid-template-columns:1fr;text-align:center}
+}
+
+/* Hide wizard + progress until started */
+.progress-bar.hidden,.container.hidden{display:none}
+
+@media(max-width:640px){
+  .intro-features{grid-template-columns:1fr}
+  .intro-steps{grid-template-columns:repeat(3,1fr)}
+  .intro-steps::before{display:none}
+  .intro-step:nth-child(n+4){margin-top:.5rem}
+}
+
+/*Footer*/
+footer{
+  background:linear-gradient(160deg,#E098B4 0%,#D088A4 50%,#C07898 100%);
+  color:rgba(255,255,255,.85);padding:3rem 2rem 2rem;
+  margin-top:3rem;position:relative;overflow:hidden;
+}
+footer::before{
+  content:'';position:absolute;width:400px;height:400px;border-radius:50%;
+  top:-200px;right:-100px;background:rgba(255,255,255,.08);
+}
+footer::after{
+  content:'';position:absolute;width:300px;height:300px;border-radius:50%;
+  bottom:-150px;left:-80px;background:rgba(255,255,255,.06);
+}
+footer>*{position:relative;z-index:1}
+.footer-inner{
+  max-width:720px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:1rem;
+}
+.footer-logo{
+  font-size:1.6rem;font-weight:500;color:#fff;letter-spacing:-.02em;
+}
+.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center}
+.footer-links a{
+  color:rgba(255,255,255,.7);text-decoration:none;font-size:.92rem;
+  transition:color .2s;
+}
+.footer-links a:hover{color:#fff}
+.footer-divider{
+  width:40px;height:1px;background:rgba(255,255,255,.25);
+}
+.footer-copy{
+  font-size:.82rem;color:rgba(255,255,255,.5);
+}
+@media(max-width:640px){
+  footer{padding:2rem 1rem 1.5rem}
+}
+
+/*Responsive*/
+@media(max-width:640px){
+  .card{padding:1.6rem 1.3rem}
+  .hero{padding:3.5rem 1rem 3rem}
+  .products-grid{grid-template-columns:1fr 1fr}
+  .look-title{font-size:1.4rem}
+  .upload-grid{grid-template-columns:1fr}
+  .event-grid{grid-template-columns:repeat(2,1fr)}
+  header{padding:.8rem 1rem}
+  .progress-label{font-size:.55rem}
+  .progress-dot{width:28px;height:28px;font-size:.7rem}
+}
+@media(max-width:420px){
+  .products-grid{grid-template-columns:1fr}
+  .header-tag{display:none}
+  .event-grid{grid-template-columns:1fr 1fr}
+}
+
+/*Animations*/
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header id="mainHeader">
+  <a class="logo" href="/" onclick="event.preventDefault();backToIntro()">
+    <div class="logo-mark">&#10043;</div>
+    <span class="logo-text">Beauty Assistant</span>
+  </a>
+  <div class="header-right">
+    <a href="/perfumes" class="header-nav">Perfumes</a>
+    <button class="cart-header-btn" onclick="toggleWishlist()">
+      &#9829;
+      <span class="cart-count" id="wishCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-ornament">&#10043; &#10043; &#10043;</div>
+  <h1>Your Personal Beauty<br>Consultation</h1>
+  <p>A bespoke experience crafted around your skin, style, and occasion</p>
+</div>
+
+<!-- ══ INTRO / LANDING ══ -->
+<div class="intro" id="introSection">
+
+  <div class="intro-headline">
+    <h2>Beauty, Personalised for You</h2>
+    <p>A complete makeup consultation that understands your skin, matches your shade, and curates the perfect routine for any occasion.</p>
+  </div>
+
+  <div class="intro-features">
+    <div class="intro-card">
+      <span class="intro-card-icon">&#128248;</span>
+      <h3>Skin Analysis</h3>
+      <p>Upload a photo and our AI detects your undertone, skin tone depth, and skin type using MediaPipe and LAB colour analysis.</p>
+    </div>
+    <div class="intro-card">
+      <span class="intro-card-icon">&#129520;</span>
+      <h3>Smart Matching</h3>
+      <p>Our AI analyses 1,600 products, thousands of interactions, and 30 active ingredients to find what works best for your skin type and occasion.</p>
+    </div>
+    <div class="intro-card">
+      <span class="intro-card-icon">&#128132;</span>
+      <h3>Complete Routine</h3>
+      <p>Get a step-by-step routine from primer to perfume, with shade matching, ingredient analysis, and personalised reasons for every recommendation.</p>
+    </div>
+  </div>
+
+  <div class="intro-how">
+    <div class="intro-how-title">How It Works</div>
+    <div class="intro-steps">
+      <div class="intro-step">
+        <div class="intro-step-num">1</div>
+        <span class="intro-step-label">Pick your<br>occasion</span>
+      </div>
+      <div class="intro-step">
+        <div class="intro-step-num">2</div>
+        <span class="intro-step-label">Upload a<br>photo</span>
+      </div>
+      <div class="intro-step">
+        <div class="intro-step-num">3</div>
+        <span class="intro-step-label">Set your<br>skin profile</span>
+      </div>
+      <div class="intro-step">
+        <div class="intro-step-num">4</div>
+        <span class="intro-step-label">Choose<br>preferences</span>
+      </div>
+      <div class="intro-step">
+        <div class="intro-step-num">5</div>
+        <span class="intro-step-label">Get your<br>look</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="intro-cta-wrap">
+    <button class="intro-cta" onclick="startConsultation()">Begin Your Consultation</button>
+  </div>
+  <p class="intro-cta-sub">Takes about 2 minutes. No account needed.</p>
+
+  <div class="intro-divider">&#10043; &#10043; &#10043;</div>
+
+  <div class="intro-perfume">
+    <div class="intro-perfume-inner">
+      <div class="intro-perfume-text">
+        <h3>Find Your Signature Scent</h3>
+        <p>Perfumes matched to your occasion. We analyse scent families, event compatibility, and your preferences to find your ideal fragrance from our curated collection.</p>
+        <a href="/perfumes" class="intro-perfume-btn">Explore Perfumes &rarr;</a>
+      </div>
+      <div class="intro-perfume-visual">
+        <span class="intro-perfume-icon">&#127800;</span>
+        <div class="intro-scent-pills">
+          <span class="intro-scent-pill"><span class="intro-scent-dot" style="background:#D4A0B0"></span> Floral</span>
+          <span class="intro-scent-pill"><span class="intro-scent-dot" style="background:#8B6845"></span> Woody</span>
+          <span class="intro-scent-pill"><span class="intro-scent-dot" style="background:#A04525"></span> Spicy</span>
+          <span class="intro-scent-pill"><span class="intro-scent-dot" style="background:#D8D080"></span> Citrus</span>
+          <span class="intro-scent-pill"><span class="intro-scent-dot" style="background:#D8A060"></span> Gourmand</span>
+          <span class="intro-scent-pill"><span class="intro-scent-dot" style="background:#7C9858"></span> Aromatic</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ PROGRESS BAR ══ -->
+<div class="progress-bar hidden" id="progressBar">
+  <div class="progress-step active" onclick="goToStep(0)">
+    <div class="progress-dot">1</div>
+    <span class="progress-label">Occasion</span>
+  </div>
+  <div class="progress-line" id="pline0"></div>
+  <div class="progress-step" onclick="goToStep(1)">
+    <div class="progress-dot">2</div>
+    <span class="progress-label">Shade Match</span>
+  </div>
+  <div class="progress-line" id="pline1"></div>
+  <div class="progress-step" onclick="goToStep(2)">
+    <div class="progress-dot">3</div>
+    <span class="progress-label">Skin Profile</span>
+  </div>
+  <div class="progress-line" id="pline2"></div>
+  <div class="progress-step" onclick="goToStep(3)">
+    <div class="progress-dot">4</div>
+    <span class="progress-label">Preferences</span>
+  </div>
+  <div class="progress-line" id="pline3"></div>
+  <div class="progress-step" onclick="goToStep(4)">
+    <div class="progress-dot">5</div>
+    <span class="progress-label">Results</span>
+  </div>
+</div>
+
+<!-- ══ FORM ══ -->
+<div class="container hidden" id="mainContainer">
+
+  <!-- ═══ STEP 1: Occasion ═══ -->
+  <div class="wizard-step active" data-step="0">
+    <div class="step-intro">
+      <div class="step-intro-num">1</div>
+      <div class="step-intro-title">Choose Your Occasion</div>
+      <div class="step-intro-line"></div>
+    </div>
+    <div class="card">
+      <div class="slabel">What's the occasion?</div>
+      <p class="slabel-sub">Select an event so we can curate the perfect look for you.</p>
+      <div class="event-grid" id="eventGrid">
+        <button class="event-btn" data-value="wedding">
+          <span class="ev-icon">&#128141;</span>Wedding
+        </button>
+        <button class="event-btn" data-value="office">
+          <span class="ev-icon">&#128188;</span>Office
+        </button>
+        <button class="event-btn" data-value="evening">
+          <span class="ev-icon">&#127769;</span>Night Out
+        </button>
+        <button class="event-btn" data-value="natural">
+          <span class="ev-icon">&#127800;</span>Everyday
+        </button>
+        <button class="event-btn" data-value="glam">
+          <span class="ev-icon">&#128139;</span>Glam Date
+        </button>
+        <button class="event-btn" data-value="festival">
+          <span class="ev-icon">&#127914;</span>Festival
+        </button>
+      </div>
+      <div class="step-nav" style="justify-content:flex-end">
+        <button class="step-nav-btn next" onclick="nextStep()">Continue &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 2: Shade Matching ═══ -->
+  <div class="wizard-step" data-step="1">
+    <div class="step-intro">
+      <div class="step-intro-num">2</div>
+      <div class="step-intro-title">Detect Your Shade</div>
+      <div class="step-intro-line"></div>
+    </div>
+    <div class="card">
+      <div class="slabel">
+        Shade Matching
+        <span class="optional-tag">optional</span>
+        <span class="undertone-active-badge" id="undertoneActiveBadge">undertone detected</span>
+      </div>
+      <p class="card-desc">Upload a photo for an exact skin colour match. We'll detect your undertone and skin tone depth, so you can use those suggestions in the next step. This is a <strong>suggestion only</strong> &#8212; you stay in control.</p>
+      <div class="photo-tip">
+        <strong>For best results:</strong> Take photos in <strong>natural daylight</strong> (near a window),
+        no makeup or filters, no shadows or harsh artificial light.
+      </div>
+      <div class="upload-grid">
+        <div class="upload-zone" id="skinZone" onclick="triggerUpload('skinFile')"
+             ondragover="onDragOver(event,'skinZone')" ondragleave="onDragLeave('skinZone')"
+             ondrop="onDrop(event,'skinFile','skinZone','skinPreview')">
+          <input type="file" id="skinFile" accept="image/*" hidden onchange="handleUpload(this,'skinZone','skinPreview')">
+          <div class="upload-placeholder">
+            <div class="upload-icon">&#128243;</div>
+            <div class="upload-label">Face / skin photo</div>
+            <div class="upload-hint">click or drag & drop</div>
+          </div>
+          <img id="skinPreview" class="upload-preview" style="display:none">
+          <button class="upload-clear" onclick="clearUpload(event,'skinFile','skinZone','skinPreview')" title="Remove">&#10005;</button>
+        </div>
+        <div class="upload-zone" id="veinZone" onclick="triggerUpload('veinFile')"
+             ondragover="onDragOver(event,'veinZone')" ondragleave="onDragLeave('veinZone')"
+             ondrop="onDrop(event,'veinFile','veinZone','veinPreview')">
+          <input type="file" id="veinFile" accept="image/*" hidden onchange="handleUpload(this,'veinZone','veinPreview')">
+          <div class="upload-placeholder">
+            <div class="upload-icon">&#129728;</div>
+            <div class="upload-label">Wrist / vein photo</div>
+            <div class="upload-hint">click or drag & drop</div>
+          </div>
+          <img id="veinPreview" class="upload-preview" style="display:none">
+          <button class="upload-clear" onclick="clearUpload(event,'veinFile','veinZone','veinPreview')" title="Remove">&#10005;</button>
+        </div>
+      </div>
+      <button class="analyse-btn" id="analyseBtn" onclick="analyseUndertone()">Analyse My Undertone</button>
+      <div id="undertoneResult" style="display:none"></div>
+
+      <div class="step-nav">
+        <button class="step-nav-btn prev" onclick="prevStep()">&larr; Back</button>
+        <button class="step-nav-btn next" onclick="nextStep()">Continue &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 3: Skin Profile ═══ -->
+  <div class="wizard-step" data-step="2">
+    <div class="step-intro">
+      <div class="step-intro-num">3</div>
+      <div class="step-intro-title">Tell Us About Your Skin</div>
+      <div class="step-intro-line"></div>
+    </div>
+    <div class="card">
+      <div class="slabel">Your Skin Profile</div>
+      <p class="slabel-sub">Now tell us about your skin. If you analysed your photo in the previous step, look for the <em>detected</em> badges to guide your choices.</p>
+
+      <div class="profile-row">
+        <div class="profile-label">Skin type</div>
+        <div class="profile-chips" id="skinTypeChips">
+          <button class="profile-chip" data-value="oily">&#128167; Oily</button>
+          <button class="profile-chip" data-value="dry">&#127797; Dry</button>
+          <button class="profile-chip" data-value="combination">&#127767; Combination</button>
+          <button class="profile-chip" data-value="normal">&#10024; Normal</button>
+        </div>
+      </div>
+
+      <div class="profile-row">
+        <div class="profile-label">Undertone</div>
+        <div class="profile-chips" id="undertoneChips">
+          <button class="profile-chip" data-value="warm">&#128993; Warm</button>
+          <button class="profile-chip" data-value="cool">&#128309; Cool</button>
+          <button class="profile-chip" data-value="neutral">&#9898; Neutral</button>
+          <button class="profile-chip profile-chip-hint" data-value="" id="undertoneAuto">Not sure &#8212; detect from photo</button>
+        </div>
+      </div>
+
+      <div class="profile-row">
+        <div class="profile-label">Skin tone depth</div>
+        <div class="profile-chips" id="lightnessChips">
+          <button class="profile-chip" data-value="light">Light</button>
+          <button class="profile-chip" data-value="light-medium">Light-Medium</button>
+          <button class="profile-chip" data-value="medium">Medium</button>
+          <button class="profile-chip" data-value="medium-deep">Medium-Deep</button>
+          <button class="profile-chip" data-value="deep">Deep</button>
+        </div>
+      </div>
+
+      <textarea class="skin-input" id="skinInput" rows="2" style="margin-top:.8rem"
+        placeholder="Anything else about your skin you'd like us to know..."></textarea>
+
+      <div class="step-nav">
+        <button class="step-nav-btn prev" onclick="prevStep()">&larr; Back</button>
+        <button class="step-nav-btn next" onclick="nextStep()">Continue &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 4: Concerns, Budget & Categories ═══ -->
+  <div class="wizard-step" data-step="3">
+    <div class="step-intro">
+      <div class="step-intro-num">4</div>
+      <div class="step-intro-title">Refine Your Preferences</div>
+      <div class="step-intro-line"></div>
+    </div>
+    <!-- Skin Concerns -->
+    <div class="card">
+      <div class="slabel">Skin Concerns <span style="font-size:.78rem;color:var(--text-tertiary);font-family:inherit;font-weight:300">(optional)</span></div>
+      <p class="card-desc">We'll prioritise products with active ingredients that target what you've selected.</p>
+      <div class="concerns-grid" id="concernsGrid">
+        <button class="concern-chip" data-concern="acne">&#128308; Acne</button>
+        <button class="concern-chip" data-concern="blackheads">&#9899; Blackheads</button>
+        <button class="concern-chip" data-concern="whiteheads">&#9898; Whiteheads</button>
+        <button class="concern-chip" data-concern="blemishes">&#128356; Blemishes</button>
+        <button class="concern-chip" data-concern="redness">&#127801; Redness</button>
+        <button class="concern-chip" data-concern="sensitive">&#127799; Sensitive</button>
+        <button class="concern-chip" data-concern="fine lines">&#128207; Fine Lines</button>
+        <button class="concern-chip" data-concern="wrinkles">&#9203; Wrinkles</button>
+        <button class="concern-chip" data-concern="dull">&#128566; Dull Skin</button>
+        <button class="concern-chip" data-concern="pores">&#11093; Large Pores</button>
+        <button class="concern-chip" data-concern="pigmentation">&#128427; Pigmentation</button>
+        <button class="concern-chip" data-concern="dark spots">&#128280; Dark Spots</button>
+        <button class="concern-chip" data-concern="dark circles">&#127769; Dark Circles</button>
+        <button class="concern-chip" data-concern="eye bags">&#128065;&#65039; Eye Bags</button>
+        <button class="concern-chip" data-concern="dehydrated">&#128167; Dehydrated</button>
+        <button class="concern-chip" data-concern="dryness">&#127964;&#65039; Dryness</button>
+      </div>
+    </div>
+
+    <!-- Budget -->
+    <div class="card">
+      <div class="slabel">Budget <span style="font-size:.78rem;color:var(--text-tertiary);font-family:inherit;font-weight:300">(optional)</span></div>
+      <label class="toggle-row">
+        <input type="checkbox" id="budgetToggle" onchange="toggleBudget(this)"> Set a maximum budget
+      </label>
+      <div class="budget-slider-wrap" id="budgetWrap">
+        <input type="range" id="budgetSlider" min="20" max="800" value="200" step="10"
+               oninput="onSlider(this)" style="--pct:25%">
+        <div class="budget-row"><span>$20</span><span>$800</span></div>
+        <div class="budget-val" id="budgetVal">$200</div>
+      </div>
+    </div>
+
+    <!-- Category picker -->
+    <div class="card">
+      <div class="slabel">What do you need? <span style="font-size:.78rem;color:var(--text-tertiary);font-family:inherit;font-weight:300">(optional)</span></div>
+      <p class="card-desc">Leave empty for a full routine, or pick the categories you want.</p>
+      <div class="cat-grid" id="catGrid">
+        <button class="cat-chip" data-cat="primer">&#129524; Primer</button>
+        <button class="cat-chip" data-cat="foundation">&#129523; Foundation</button>
+        <button class="cat-chip" data-cat="concealer">&#128394;&#65039; Concealer</button>
+        <button class="cat-chip" data-cat="powder">&#127775; Powder</button>
+        <button class="cat-chip" data-cat="contour">&#127912; Contour</button>
+        <button class="cat-chip" data-cat="blush">&#127800; Blush</button>
+        <button class="cat-chip" data-cat="highlighter">&#11088; Highlighter</button>
+        <button class="cat-chip" data-cat="eyeshadow">&#10024; Eyeshadow</button>
+        <button class="cat-chip" data-cat="mascara">&#128420; Mascara</button>
+        <button class="cat-chip" data-cat="lipstick">&#128132; Lipstick</button>
+        <button class="cat-chip" data-cat="perfume">&#127800; Perfume</button>
+      </div>
+      <div class="cat-controls">
+        <button class="cat-mini-btn" onclick="clearCats()">Clear all</button>
+        <span class="cat-status" id="catStatus">Full routine selected</span>
+      </div>
+    </div>
+
+    <!-- CTAs -->
+    <div class="cta-row">
+      <button class="cta-btn" id="ctaBtn" onclick="submitRecommend()">Reveal My Personalised Look</button>
+      <button class="cta-btn cta-secondary" id="routineBtn" onclick="submitRoutine()">Build My Full Routine</button>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 5: Results ═══ -->
+  <div class="wizard-step" data-step="4">
+    <div id="results">
+      <div class="results-divider"><span>Your Results</span></div>
+      <div id="resultsContent"></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ══ MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">&#10005;</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ══ CART OVERLAY ══ -->
+<div class="cart-overlay" id="wishOverlay" onclick="toggleWishlist()"></div>
+
+<!-- ══ WISHLIST PANEL ══ -->
+<div class="cart-panel" id="wishPanel">
+  <div class="cart-header">
+    <span class="cart-title">&#9829; Your Wishlist</span>
+    <button class="cart-close-btn" onclick="toggleWishlist()">&#10005;</button>
+  </div>
+  <div class="cart-items" id="wishItems">
+    <div class="cart-empty">Your wishlist is empty.<br>Tap the &#9825; on any product.</div>
+  </div>
+  <div class="cart-footer" id="wishFooter" style="display:none">
+    <button class="cart-clear-btn" onclick="clearWishlist()">Clear all</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Beauty Assistant</span>
+    <div class="footer-links">
+      <a href="/" onclick="event.preventDefault();backToIntro()">Home</a>
+      <a href="/perfumes">Perfumes</a>
+    </div>
+    <div class="footer-divider"></div>
+    <span class="footer-copy">&copy; 2026 Maria P&#259;tru&#539; &middot; AI Master's Thesis</span>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════
+   CATEGORY STYLES
+══════════════════════════════════════ */
+const CAT = {
+  foundation:  {g:'linear-gradient(135deg,#F0E0D4,#D8C0A8)',  e:'\u{1FAD9}' },
+  concealer:   {g:'linear-gradient(135deg,#F2E4D2,#DCC8A0)',  e:'\u{1F58A}\uFE0F'},
+  blush:       {g:'linear-gradient(135deg,#F0D0D8,#D8A0B0)',  e:'\u{1F338}' },
+  eyeshadow:   {g:'linear-gradient(135deg,#DCC8E0,#A880B8)',  e:'\u2728' },
+  mascara:     {g:'linear-gradient(135deg,#6A5A7A,#3A2A4A)',  e:'\u{1F5A4}' },
+  lipstick:    {g:'linear-gradient(135deg,#E0A0B8,#B05070)',  e:'\u{1F484}' },
+  powder:      {g:'linear-gradient(135deg,#F0E4C8,#D0B880)',  e:'\u{1F31F}' },
+  highlighter: {g:'linear-gradient(135deg,#F0E080,#D0A840)',  e:'\u2B50' },
+  contour:     {g:'linear-gradient(135deg,#C8A880,#8A5828)',  e:'\u{1F3A8}' },
+  primer:      {g:'linear-gradient(135deg,#DDE8F0,#A8C0D0)',  e:'\u{1F9F4}' },
+  perfume:     {g:'linear-gradient(135deg,#F5EDE0,#E0C8A8)',  e:'\u{1F338}' },
+};
+
+const SCENT_FAMILIES = {
+  floral:         {emoji:'\u{1F338}', label:'Floral',         hex:'#D4A0B0'},
+  fresh_citrus:   {emoji:'\u{1F34B}', label:'Fresh & Citrus', hex:'#D8D080'},
+  woody:          {emoji:'\u{1F332}', label:'Woody & Earthy', hex:'#8B6845'},
+  warm_spicy:     {emoji:'\u{1F525}', label:'Warm & Spicy',   hex:'#A04525'},
+  sweet_gourmand: {emoji:'\u{1F370}', label:'Sweet Gourmand', hex:'#D8A060'},
+  aromatic:       {emoji:'\u{1F33F}', label:'Aromatic Herb',  hex:'#7C9858'},
+};
+const catStyle = c => CAT[c?.toLowerCase()] || {g:'linear-gradient(135deg,#D8C0B0,#A88070)',e:'\u2743'};
+
+/* ══════════════════════════════════════
+   START CONSULTATION
+══════════════════════════════════════ */
+function startConsultation() {
+  document.getElementById('introSection').style.display = 'none';
+  document.getElementById('progressBar').classList.remove('hidden');
+  document.getElementById('mainContainer').classList.remove('hidden');
+  document.getElementById('progressBar').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function backToIntro() {
+  document.getElementById('introSection').style.display = '';
+  document.getElementById('progressBar').classList.add('hidden');
+  document.getElementById('mainContainer').classList.add('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══════════════════════════════════════
+   WIZARD NAVIGATION
+══════════════════════════════════════ */
+let currentStep = 0;
+const totalSteps = 5;
+
+function goToStep(n) {
+  if(n < 0 || n >= totalSteps) return;
+  // Hide all steps
+  document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+  // Show target
+  const target = document.querySelector(`.wizard-step[data-step="${n}"]`);
+  if(target) target.classList.add('active');
+
+  // Update progress bar
+  const steps = document.querySelectorAll('.progress-step');
+  const lines = document.querySelectorAll('.progress-line');
+  steps.forEach((s, i) => {
+    s.classList.remove('active','completed');
+    if(i < n) s.classList.add('completed');
+    else if(i === n) s.classList.add('active');
+  });
+  lines.forEach((l, i) => {
+    l.classList.toggle('filled', i < n);
+  });
+
+  currentStep = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function nextStep() { goToStep(currentStep + 1) }
+function prevStep() { goToStep(currentStep - 1) }
+
+/* ══════════════════════════════════════
+   HEADER SCROLL EFFECT
+══════════════════════════════════════ */
+window.addEventListener('scroll', () => {
+  document.getElementById('mainHeader').classList.toggle('scrolled', window.scrollY > 10);
+});
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+const state = {
+  products: [],
+  look: null,
+  wishlist: new Set(),
+  wishlistData: new Map(),
+  activeFilter: 'all',
+  undertone: null,
+  selectedEvent: null,
+  selectedCats: new Set(),
+  lightness: null,
+  concerns: new Set(),
+  cnnSkinType: null,
+  cnnAcne: null,
+  skinHex: null,
+  manualSkinType: null,
+  manualUndertone: null,
+  manualLightness: null,
+};
+
+/* ══════════════════════════════════════
+   FORM HELPERS
+══════════════════════════════════════ */
+document.querySelectorAll('.event-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.event-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.selectedEvent = btn.dataset.value;
+  });
+});
+
+function setupProfileChips(containerId, stateKey){
+  document.querySelectorAll(`#${containerId} .profile-chip`).forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll(`#${containerId} .profile-chip`).forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      state[stateKey] = chip.dataset.value || null;
+    });
+  });
+}
+setupProfileChips('skinTypeChips',  'manualSkinType');
+setupProfileChips('undertoneChips', 'manualUndertone');
+setupProfileChips('lightnessChips', 'manualLightness');
+
+document.querySelectorAll('.concern-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const c = chip.dataset.concern;
+    if(state.concerns.has(c)){
+      state.concerns.delete(c);
+      chip.classList.remove('active');
+    } else {
+      state.concerns.add(c);
+      chip.classList.add('active');
+    }
+  });
+});
+
+document.querySelectorAll('.cat-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const cat = chip.dataset.cat;
+    if(state.selectedCats.has(cat)){
+      state.selectedCats.delete(cat);
+      chip.classList.remove('active');
+    } else {
+      state.selectedCats.add(cat);
+      chip.classList.add('active');
+    }
+    updateCatStatus();
+  });
+});
+
+function clearCats(){
+  state.selectedCats.clear();
+  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+  updateCatStatus();
+}
+
+function updateCatStatus(){
+  const el = document.getElementById('catStatus');
+  const n = state.selectedCats.size;
+  if(n === 0) el.textContent = 'Full routine selected';
+  else if(n === 1) el.textContent = '1 category selected';
+  else el.textContent = `${n} categories selected`;
+}
+
+function setHint(text) {
+  const ta = document.getElementById('skinInput');
+  ta.value = text; ta.focus();
+  ta.style.borderColor = 'var(--rose-muted)';
+  setTimeout(() => ta.style.borderColor = '', 500);
+}
+
+function toggleBudget(cb) {
+  document.getElementById('budgetWrap').classList.toggle('open', cb.checked);
+}
+
+function onSlider(el) {
+  const pct = ((el.value - el.min) / (el.max - el.min) * 100).toFixed(1);
+  el.style.setProperty('--pct', pct + '%');
+  document.getElementById('budgetVal').textContent = '$' + el.value;
+}
+
+/* ══════════════════════════════════════
+   SHADE MATCHING
+══════════════════════════════════════ */
+function triggerUpload(id){ document.getElementById(id).click() }
+
+function handleUpload(input, zoneId, previewId) {
+  const file = input.files[0]; if(!file) return;
+  const zone = document.getElementById(zoneId);
+  const prev = document.getElementById(previewId);
+  const ph   = zone.querySelector('.upload-placeholder');
+  const reader = new FileReader();
+  reader.onload = e => {
+    prev.src = e.target.result; prev.style.display='block';
+    ph.style.display='none'; zone.classList.add('has-image');
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearUpload(evt,inputId,zoneId,previewId) {
+  evt.stopPropagation();
+  document.getElementById(inputId).value = '';
+  const zone = document.getElementById(zoneId);
+  const prev = document.getElementById(previewId);
+  prev.src=''; prev.style.display='none';
+  zone.querySelector('.upload-placeholder').style.display='';
+  zone.classList.remove('has-image');
+  const hasSkin = !!document.getElementById('skinFile').files.length;
+  const hasVein = !!document.getElementById('veinFile').files.length;
+  if(!hasSkin && !hasVein) resetUndertone();
+}
+
+function onDragOver(evt,zoneId){ evt.preventDefault(); document.getElementById(zoneId).style.borderColor='var(--rose-muted)' }
+function onDragLeave(zoneId){ document.getElementById(zoneId).style.borderColor='' }
+function onDrop(evt,inputId,zoneId,previewId){
+  evt.preventDefault(); onDragLeave(zoneId);
+  const file = evt.dataTransfer.files[0];
+  if(!file||!file.type.startsWith('image/')) return;
+  const dt = new DataTransfer(); dt.items.add(file);
+  const inp = document.getElementById(inputId); inp.files=dt.files;
+  handleUpload(inp,zoneId,previewId);
+}
+
+async function analyseUndertone() {
+  const skinFile = document.getElementById('skinFile').files[0];
+  const veinFile = document.getElementById('veinFile').files[0];
+  if(!skinFile && !veinFile){ showToast('Upload at least one photo'); return }
+  const btn = document.getElementById('analyseBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Analysing\u2026';
+  try {
+    const fd = new FormData();
+    if(skinFile) fd.append('skin_photo', skinFile);
+    if(veinFile) fd.append('vein_photo', veinFile);
+    const res = await fetch('/analyze-undertone',{method:'POST',body:fd});
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.detail||`HTTP ${res.status}`);
+    renderUndertone(data);
+  } catch(e) {
+    document.getElementById('undertoneResult').innerHTML=`<div class="error-box" style="margin-top:.8rem">${e.message}</div>`;
+    document.getElementById('undertoneResult').style.display='block';
+  } finally { btn.disabled=false; btn.innerHTML='Analyse My Undertone' }
+}
+
+function renderUndertone(data) {
+  console.log('[Beauty] /analyze-undertone response:', data);
+  state.undertone   = data.undertone;
+  state.lightness   = data.lightness || null;
+  state.cnnSkinType = data.cnn_skin_type || null;
+  state.cnnAcne     = data.cnn_acne || null;
+  state.skinHex     = data.skin_hex || null;
+
+  if(data.undertone){
+    document.querySelectorAll('#undertoneChips .profile-chip').forEach(c => c.classList.remove('detected'));
+    const chip = document.querySelector(`#undertoneChips .profile-chip[data-value="${data.undertone}"]`);
+    if(chip) chip.classList.add('detected');
+  }
+  if(data.lightness){
+    document.querySelectorAll('#lightnessChips .profile-chip').forEach(c => c.classList.remove('detected'));
+    const chip = document.querySelector(`#lightnessChips .profile-chip[data-value="${data.lightness}"]`);
+    if(chip) chip.classList.add('detected');
+  }
+  if(data.suggested_skin_type){
+    document.querySelectorAll('#skinTypeChips .profile-chip').forEach(c => c.classList.remove('detected'));
+    const chip = document.querySelector(`#skinTypeChips .profile-chip[data-value="${data.suggested_skin_type}"]`);
+    if(chip) chip.classList.add('detected');
+  }
+  if(data.suggested_acne === 'moderate' || data.suggested_acne === 'severe'){
+    const chip = document.querySelector('.concern-chip[data-concern="acne"]');
+    if(chip) chip.classList.add('detected');
+  }
+
+  if(state.skinHex){
+    setTimeout(() => {
+      const picker = document.getElementById('skinHexPicker');
+      if(picker) picker.value = state.skinHex;
+      const label = document.getElementById('skinHexLabel');
+      if(label) label.textContent = state.skinHex;
+    }, 50);
+  }
+
+  document.getElementById('undertoneActiveBadge').style.display='inline-block';
+  const confPct = Math.round((data.confidence||0)*100);
+
+  // Skin type + acne detection display
+  let skinAnalysisRow = '';
+  if(data.suggested_skin_type){
+    const skinConf = Math.round((data.suggested_skin_conf||0)*100);
+    const acnePart = (data.suggested_acne && data.suggested_acne !== 'low')
+      ? `<div class="analysis-item">
+           <span class="analysis-label">Acne detected</span>
+           <span class="analysis-value analysis-acne-${data.suggested_acne}">${cap(data.suggested_acne)}</span>
+           <span class="analysis-conf">${Math.round((data.suggested_acne_conf||0)*100)}%</span>
+         </div>`
+      : '';
+    skinAnalysisRow = `
+      <div class="skin-analysis-row">
+        <div class="analysis-title">Skin Analysis</div>
+        <div class="analysis-items">
+          <div class="analysis-item">
+            <span class="analysis-label">Skin type</span>
+            <span class="analysis-value">${cap(data.suggested_skin_type)}</span>
+            <span class="analysis-conf">${skinConf}%</span>
+          </div>
+          ${acnePart}
+        </div>
+        <div class="analysis-hint">These suggestions will be pre-selected in your Skin Profile (next step).</div>
+      </div>`;
+  }
+
+  let dualRow = '';
+  if(data.skin_undertone && data.vein_undertone){
+    const veinPct = Math.round((data.vein_confidence||0)*100);
+    const agree = data.skin_undertone === data.vein_undertone;
+    dualRow = `<div class="dual-row">
+      <div class="dual-header">We analysed both your photos separately:</div>
+      <div class="dual-signals">
+        <span class="dual-tag">Face analysis: <strong>${cap(data.skin_undertone)}</strong></span>
+        <span class="dual-tag">Vein analysis: <strong>${cap(data.vein_undertone)}</strong> (${veinPct}% confidence)</span>
+      </div>
+      ${agree
+        ? '<div class="dual-verdict dual-agree">Both signals agree \u2014 this makes us more confident in your undertone result.</div>'
+        : '<div class="dual-verdict dual-mixed">The two signals disagree \u2014 the result above is our best estimate, but you may want to select your undertone manually in the next step.</div>'}
+    </div>`;
+  }
+
+  const hexPickerRow = state.skinHex ? `
+    <div class="hex-picker-row">
+      <span class="hex-picker-label">Detected skin tone:</span>
+      <input type="color" id="skinHexPicker" class="hex-picker" value="${state.skinHex}"
+             oninput="onSkinHexChange(this.value)" title="Click to adjust if it doesn't match your real skin">
+      <span id="skinHexLabel" class="hex-picker-value">${state.skinHex}</span>
+      <button class="hex-picker-reset" onclick="resetSkinHex('${state.skinHex}')" title="Reset to detected">\u21BA</button>
+    </div>
+    <div class="hex-picker-hint">If shade matches look off, click the color above to fine-tune your real skin tone.</div>
+  ` : '';
+
+  document.getElementById('undertoneResult').innerHTML=`
+    <div class="undertone-result">
+      <div class="undertone-swatch" style="background:${data.skin_hex||data.hex_color||'#c8956b'}"></div>
+      <div style="flex:1;min-width:0">
+        <div class="undertone-name">${data.emoji||''} ${data.label||data.undertone}</div>
+        <div class="undertone-depth">${data.lightness_label||''}</div>
+        <div class="undertone-tip">${data.tip||''}</div>
+        <div class="conf-bar-wrap">
+          <div class="conf-bar-bg"><div class="conf-bar-fill" style="width:${confPct}%"></div></div>
+          <span class="conf-label">confidence ${confPct}%</span>
+        </div>
+        ${dualRow}
+        ${skinAnalysisRow}
+        ${hexPickerRow}
+      </div>
+    </div>`;
+  document.getElementById('undertoneResult').style.display='block';
+}
+
+function onSkinHexChange(newHex){
+  state.skinHex = newHex;
+  const label = document.getElementById('skinHexLabel');
+  if(label) label.textContent = newHex;
+  const sw = document.querySelector('.undertone-swatch');
+  if(sw) sw.style.background = newHex;
+  showToast('Skin tone updated \u2014 re-generate to see new shades');
+}
+
+function resetSkinHex(originalHex){
+  state.skinHex = originalHex;
+  const picker = document.getElementById('skinHexPicker');
+  const label = document.getElementById('skinHexLabel');
+  if(picker) picker.value = originalHex;
+  if(label) label.textContent = originalHex;
+  const sw = document.querySelector('.undertone-swatch');
+  if(sw) sw.style.background = originalHex;
+  showToast('Reset to detected');
+}
+
+function resetUndertone(){
+  state.undertone=null;
+  state.lightness=null;
+  state.cnnSkinType=null;
+  state.cnnAcne=null;
+  state.skinHex=null;
+  document.getElementById('undertoneActiveBadge').style.display='none';
+  const el=document.getElementById('undertoneResult'); el.innerHTML=''; el.style.display='none';
+}
+
+/* ══════════════════════════════════════
+   RECOMMEND
+══════════════════════════════════════ */
+async function submitRecommend() {
+  const skinDesc = document.getElementById('skinInput').value.trim();
+  const hasBudget = document.getElementById('budgetToggle').checked;
+  const budget = hasBudget ? parseFloat(document.getElementById('budgetSlider').value) : null;
+
+  if(!state.selectedEvent){ shake('eventGrid'); showToast('Please pick an occasion'); goToStep(0); return }
+  if(!state.manualSkinType){ shake('skinTypeChips'); showToast('Please pick your skin type'); goToStep(2); return }
+
+  if(state.selectedCats.size > 0){
+    return submitRoutine();
+  }
+
+  // Switch to results step
+  goToStep(4);
+
+  const btn = document.getElementById('ctaBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Crafting your look\u2026';
+
+  showSkeletons();
+
+  try {
+    const res = await fetch('/recommend',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        skin_description: skinDesc,
+        event_type: state.selectedEvent,
+        budget,
+        undertone: state.manualUndertone || state.undertone,
+        lightness: state.manualLightness || state.lightness,
+        cnn_skin_type: state.manualSkinType,
+        concerns: Array.from(state.concerns),
+        skin_hex: state.skinHex,
+      })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error||`HTTP ${res.status}`);
+    renderResults(data);
+  } catch(e) { renderError(e.message) }
+  finally { btn.disabled=false; btn.innerHTML='Reveal My Personalised Look' }
+}
+
+/* ══════════════════════════════════════
+   ROUTINE
+══════════════════════════════════════ */
+function logRoutineDebug(payload, data){
+  console.log('[Beauty] /routine payload:', payload);
+  console.log('[Beauty] /routine response:', data);
+  const f = (data.routine_steps||[]).find(s => /^(foundation|concealer|contour)$/.test(s.category||''));
+  if(f){
+    console.log('[Beauty] First foundation:', f.name);
+    console.log('[Beauty] recommended_shade:', f.recommended_shade);
+    console.log('[Beauty] shade_match_source:', f.shade_match_source);
+  }
+}
+
+async function submitRoutine() {
+  const skinDesc = document.getElementById('skinInput').value.trim();
+  const hasBudget = document.getElementById('budgetToggle').checked;
+  const budget = hasBudget ? parseFloat(document.getElementById('budgetSlider').value) : null;
+
+  if(!state.selectedEvent){ shake('eventGrid'); showToast('Please pick an occasion'); goToStep(0); return }
+  if(!state.manualSkinType){ shake('skinTypeChips'); showToast('Please pick your skin type'); goToStep(2); return }
+
+  // Switch to results step
+  goToStep(4);
+
+  const btn = document.getElementById('routineBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Building your routine\u2026';
+  showSkeletons();
+
+  try {
+    const cats = Array.from(state.selectedCats);
+    const payload = {
+      skin_description: skinDesc,
+      event_type: state.selectedEvent,
+      budget,
+      undertone: state.manualUndertone || state.undertone,
+      lightness: state.manualLightness || state.lightness,
+      cnn_skin_type: state.manualSkinType,
+      concerns: Array.from(state.concerns),
+      skin_hex: state.skinHex,
+      categories: cats.length ? cats : null,
+      top_k_per_category: cats.length === 1 ? 3 : 1,
+    };
+    const res = await fetch('/routine',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if(!res.ok || data.error) throw new Error(data.error||`HTTP ${res.status}`);
+    logRoutineDebug(payload, data);
+    renderRoutine(data);
+  } catch(e) { renderError(e.message) }
+  finally { btn.disabled=false; btn.innerHTML='Build My Full Routine' }
+}
+
+function renderRoutine(data) {
+  const steps = data.routine_steps || [];
+  state.products = steps.map(s => ({...s}));
+
+  const skin   = data.detected_skin_type || data.user_profile?.skin_type || '';
+  const event  = data.user_profile?.event_type || state.selectedEvent || '';
+  const budget = data.user_profile?.budget;
+  const ut     = data.user_profile?.undertone;
+  const utEmoji = {warm:'\u{1F7E1}',cool:'\u{1F535}',neutral:'\u26AA'}[ut]||'';
+
+  const cats = Array.from(state.selectedCats);
+  let title;
+  if(cats.length === 0){
+    title = `${data.step_count}-Step ${cap(event)} Look`;
+  } else if(cats.length === 1){
+    title = `${cap(cats[0])} Picks for ${cap(event)}`;
+  } else {
+    title = `${data.step_count}-Step Custom Routine`;
+  }
+
+  let html = `
+  <div class="routine-header">
+    <div class="routine-kicker">Your Personal Routine</div>
+    <div class="routine-title">${title}</div>
+    <div class="routine-summary">
+      <span>Skin: <strong>${skin}</strong></span>
+      <span>Steps: <strong>${data.step_count}</strong></span>
+      <span>Total: <strong>$${(data.total_price||0).toFixed(2)}</strong></span>
+      ${ut ? `<span>${utEmoji} <strong>${ut}</strong> undertone</span>` : ''}
+      ${budget ? `<span>Budget: <strong>$${budget}</strong></span>` : ''}
+    </div>
+  </div>`;
+
+  html += `<div class="timeline">`;
+  steps.forEach((s, i) => {
+    const cs = catStyle(s.category);
+    html += `
+    <div class="step-item" style="animation-delay:${i*90}ms" onclick="openModal(${s.product_id})">
+      <span class="step-bullet">${s.step}</span>
+      <div class="step-content">
+        <div class="step-img" style="background:${cs.g}">
+          <img src="${s.image_url||''}" alt="${s.name}" onerror="stepImgFallback(this)" ${!s.image_url?'style="display:none"':''}>
+          <span class="step-img-emoji" ${s.image_url?'style="display:none"':''}>${cs.e}</span>
+        </div>
+        <div class="step-body">
+          <div class="step-cat">${s.category_label}</div>
+          <div class="step-name">${s.name}</div>
+          <div class="step-brand">${s.brand}</div>
+          <div class="step-instruction">${s.instruction}</div>
+          <div class="step-meta">
+            <span class="step-price">$${s.price.toFixed(2)}</span>
+            <span class="step-rating">${stars(s.rating)}</span>
+            <span class="step-tag">${s.finish}</span>
+          </div>
+          ${shadeStripHTML(s)}
+          ${colorMatchHTML(s)}
+          ${perfumeStripHTML(s)}
+          ${concernBadgeHTML(s)}
+        </div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="routine-actions">
+    <button class="routine-add-all" onclick="wishlistAllRoutine()">\u2665 Save All to Wishlist</button>
+  </div>`;
+
+  const resultsDiv = document.getElementById('results');
+  document.getElementById('resultsContent').innerHTML = html;
+  resultsDiv.classList.add('open');
+  setTimeout(()=>resultsDiv.scrollIntoView({behavior:'smooth',block:'start'}),80);
+}
+
+function wishlistAllRoutine() {
+  let added = 0;
+  state.products.forEach(p => {
+    if(!state.wishlist.has(p.product_id)){
+      state.wishlist.add(p.product_id);
+      state.wishlistData.set(p.product_id, {...p});
+      added++;
+    }
+  });
+  updateWishCount(); pulseWishCount();
+  document.querySelectorAll('.prod-wish-btn').forEach(btn => {
+    btn.classList.add('wishlisted');
+    btn.textContent = '\u2665';
+  });
+  showToast(`Saved ${added} item${added!==1?'s':''} to wishlist`);
+}
+
+function stepImgFallback(img){
+  img.style.display='none';
+  const emoji=img.parentNode.querySelector('.step-img-emoji');
+  if(emoji) emoji.style.display='';
+}
+
+/* ══════════════════════════════════════
+   SKELETON
+══════════════════════════════════════ */
+function showSkeletons(){
+  const el = document.getElementById('results');
+  const rc = document.getElementById('resultsContent');
+  rc.innerHTML=`
+    <div class="results-divider" style="margin-bottom:1.5rem"><span>Loading</span></div>
+    <div class="products-grid">
+      ${Array(5).fill(0).map(()=>`
+        <div class="skeleton-card">
+          <div class="skel-img"></div>
+          <div class="skel-body">
+            <div class="skel-line w50"></div>
+            <div class="skel-line w90"></div>
+            <div class="skel-line w70"></div>
+            <div class="skel-line w50"></div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  el.classList.add('open');
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ══════════════════════════════════════
+   RENDER RESULTS
+══════════════════════════════════════ */
+function renderResults(data) {
+  state.products = data.recommended_products || [];
+  state.look     = data.recommended_look;
+  state.activeFilter = 'all';
+
+  const skin    = data.detected_skin_type || data.user_profile?.skin_type || '';
+  const event   = data.user_profile?.event_type || state.selectedEvent || '';
+  const budget  = data.user_profile?.budget;
+  const ut      = data.user_profile?.undertone;
+  const alts    = data.alternative_looks || [];
+  const utEmoji = {warm:'\u{1F7E1}',cool:'\u{1F535}',neutral:'\u26AA'}[ut]||'';
+
+  let html = '';
+
+  html += `<div class="skin-badge">
+    Skin: <strong>${skin}</strong>
+    &ensp;\u00B7&ensp; Event: <strong>${event}</strong>
+    ${ut ? `&ensp;\u00B7&ensp; Undertone: <strong>${utEmoji} ${ut}</strong>` : ''}
+    ${budget ? `&ensp;\u00B7&ensp; Budget: <strong>$${budget}</strong>` : ''}
+  </div>`;
+
+  if(state.look){
+    const l = state.look;
+    html += `
+    <div class="look-hero">
+      <div class="look-kicker">Recommended Look</div>
+      <div class="look-title">${l.name}</div>
+      <div class="look-badges">
+        <span class="look-badge">${cap(l.style)} style</span>
+        <span class="look-badge">${cap(l.occasion)}</span>
+      </div>
+    </div>`;
+  }
+
+  const categories = [...new Set(state.products.map(p=>p.category))];
+  if(categories.length > 1){
+    html += `<div class="filter-row" id="filterRow">
+      <span class="filter-label">Filter</span>
+      <button class="filter-btn active" onclick="filterCat('all',this)">All</button>
+      ${categories.map(c=>`<button class="filter-btn" onclick="filterCat('${c}',this)">${cap(c)}</button>`).join('')}
+    </div>`;
+  }
+
+  html += `<div class="products-heading">Products for You <small style="font-size:.78rem;color:var(--text-tertiary);font-family:inherit;font-weight:300">(${state.products.length} picks)</small></div>`;
+
+  html += `<div class="products-grid" id="productsGrid">`;
+  state.products.forEach((p,i) => { html += productCardHTML(p,i) });
+  html += `</div>`;
+
+  if(alts.length){
+    html += `<div class="alt-section">
+      <div class="alt-title">More Looks You Might Love</div>
+      <div class="alt-chips">${alts.map(l=>`<span class="alt-chip">${l.name}</span>`).join('')}</div>
+    </div>`;
+  }
+
+  const resultsDiv = document.getElementById('results');
+  document.getElementById('resultsContent').innerHTML = html;
+  resultsDiv.classList.add('open');
+  setTimeout(()=>resultsDiv.scrollIntoView({behavior:'smooth',block:'start'}),80);
+}
+
+/* ══════════════════════════════════════
+   PRODUCT CARD HTML
+══════════════════════════════════════ */
+function productCardHTML(p, i) {
+  const cs = catStyle(p.category);
+  const wishlisted = state.wishlist.has(p.product_id);
+  const delay = i * 70;
+  return `
+  <div class="product-card" data-pid="${p.product_id}" data-cat="${p.category}"
+       style="animation-delay:${delay}ms" onclick="openModal(${p.product_id})">
+    <div class="prod-img-area" style="background:${cs.g}">
+      <img src="${p.image_url||''}" alt="${p.name}" class="prod-real-img"
+           onerror="imgFallback(this)" ${!p.image_url?'style="display:none"':''}>
+      <span class="prod-cat-emoji" ${p.image_url?'style="display:none"':''}>${cs.e}</span>
+      <span class="prod-brand-chip">${p.brand}</span>
+      <button class="prod-wish-btn ${wishlisted?'wishlisted':''}"
+              onclick="event.stopPropagation();toggleWish(${p.product_id})"
+              id="wish-${p.product_id}">
+        ${wishlisted?'\u2665':'\u2661'}
+      </button>
+    </div>
+    <div class="prod-body">
+      <div class="prod-cat-label">${p.category}</div>
+      <div class="prod-name">${p.name}</div>
+      <div class="prod-meta">
+        <span class="prod-price">$${p.price.toFixed(2)}</span>
+        <span class="prod-stars">${stars(p.rating)}</span>
+      </div>
+      <span class="prod-finish-tag">${p.finish}</span>
+      ${shadeStripHTML(p)}
+      ${colorMatchHTML(p)}
+      ${perfumeStripHTML(p)}
+      ${concernBadgeHTML(p)}
+      <div class="prod-reason">${p.reason}</div>
+    </div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════
+   FILTER
+══════════════════════════════════════ */
+function filterCat(cat, btn) {
+  state.activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.product-card[data-cat]').forEach(card=>{
+    const show = cat==='all' || card.dataset.cat===cat;
+    card.style.display = show ? '' : 'none';
+  });
+}
+
+/* ══════════════════════════════════════
+   WISHLIST PANEL
+══════════════════════════════════════ */
+function updateWishCount(){
+  const el = document.getElementById('wishCount');
+  if(!el) return;
+  el.textContent = state.wishlist.size;
+  el.parentElement.style.display = 'flex';
+  renderWishlistItems();
+}
+
+function pulseWishCount(){
+  const el = document.getElementById('wishCount');
+  if(!el) return;
+  el.style.animation='none'; el.offsetHeight;
+  el.style.animation='pulse .35s ease';
+}
+
+function renderWishlistItems(){
+  const el = document.getElementById('wishItems');
+  const footer = document.getElementById('wishFooter');
+  if(!el) return;
+  if(!state.wishlist.size){
+    el.innerHTML=`<div class="cart-empty">Your wishlist is empty.<br>Tap the \u2661 on any product.</div>`;
+    if(footer) footer.style.display='none';
+    return;
+  }
+  if(footer) footer.style.display='block';
+  const items = Array.from(state.wishlist).map(pid => state.wishlistData.get(pid)).filter(Boolean);
+  el.innerHTML = items.map(p=>{
+    const cs = catStyle(p.category);
+    const img = p.image_url
+      ? `<img src="${p.image_url}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+         <span class="cart-item-emoji" style="display:none">${cs.e}</span>`
+      : `<span class="cart-item-emoji">${cs.e}</span>`;
+    return `<div class="cart-item">
+      <div class="cart-item-img" style="background:${cs.g}">${img}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${p.name}</div>
+        <div class="cart-item-brand">${p.brand}</div>
+      </div>
+      <span class="cart-item-price">$${p.price.toFixed(2)}</span>
+      <button class="cart-item-remove" onclick="removeFromWishlist(${p.product_id})" title="Remove">\u2715</button>
+    </div>`;
+  }).join('');
+}
+
+function toggleWishlist(){
+  const panel = document.getElementById('wishPanel');
+  const overlay = document.getElementById('wishOverlay');
+  const open = panel.classList.toggle('open');
+  overlay.classList.toggle('open', open);
+  if(open) renderWishlistItems();
+}
+
+function removeFromWishlist(pid){
+  state.wishlist.delete(pid);
+  state.wishlistData.delete(pid);
+  const wbtn = document.getElementById(`wish-${pid}`);
+  if(wbtn){ wbtn.classList.remove('wishlisted'); wbtn.textContent='\u2661' }
+  const mbtn = document.getElementById(`modal-wish-${pid}`);
+  if(mbtn){
+    mbtn.classList.remove('in-cart');
+    mbtn.innerHTML='\u2661 Add to Wishlist';
+  }
+  updateWishCount();
+}
+
+function clearWishlist(){
+  const pids = Array.from(state.wishlist);
+  state.wishlist.clear();
+  state.wishlistData.clear();
+  pids.forEach(pid => {
+    const wbtn = document.getElementById(`wish-${pid}`);
+    if(wbtn){ wbtn.classList.remove('wishlisted'); wbtn.textContent='\u2661' }
+  });
+  updateWishCount();
+  showToast('Wishlist cleared');
+}
+
+/* ══════════════════════════════════════
+   WISHLIST (heart toggle)
+══════════════════════════════════════ */
+function toggleWish(pid){
+  if(state.wishlist.has(pid)){
+    state.wishlist.delete(pid);
+    state.wishlistData.delete(pid);
+    const btn=document.getElementById(`wish-${pid}`);
+    if(btn){btn.classList.remove('wishlisted');btn.textContent='\u2661'}
+    const mbtn=document.getElementById(`modal-wish-${pid}`);
+    if(mbtn){mbtn.classList.remove('in-cart');mbtn.innerHTML='\u2661 Add to Wishlist'}
+    showToast('Removed from wishlist');
+  } else {
+    state.wishlist.add(pid);
+    const p = state.products.find(x => x.product_id === pid);
+    if(p) state.wishlistData.set(pid, {...p});
+    const btn=document.getElementById(`wish-${pid}`);
+    if(btn){btn.classList.add('wishlisted');btn.textContent='\u2665'}
+    const mbtn=document.getElementById(`modal-wish-${pid}`);
+    if(mbtn){mbtn.classList.add('in-cart');mbtn.innerHTML='\u2665 Wishlisted'}
+    showToast('Added to wishlist');
+    pulseWishCount();
+  }
+  updateWishCount();
+}
+
+/* ══════════════════════════════════════
+   MODAL
+══════════════════════════════════════ */
+function openModal(pid){
+  const p = state.products.find(x=>x.product_id===pid); if(!p) return;
+  const cs = catStyle(p.category);
+  const wishlisted = state.wishlist.has(pid);
+
+  const ingredients = (p.key_ingredients||'').split(',').filter(Boolean).map(i => i.trim());
+  const matched = p.matched_ingredients || [];
+  const matchMap = {};
+  matched.forEach(m => { matchMap[m.ingredient.toLowerCase()] = m.concerns; });
+
+  const ingrHTML = ingredients.length
+    ? ingredients.map(i => {
+        const concerns = matchMap[i.toLowerCase()];
+        if(concerns && concerns.length){
+          return `<span class="ingr-chip ingr-matched" title="Treats: ${concerns.join(', ')}">
+            \u2713 ${i}
+            <span class="ingr-treats">${concerns.join(', ')}</span>
+          </span>`;
+        }
+        return `<span class="ingr-chip">${i}</span>`;
+      }).join('')
+    : '<span class="ingr-chip">Dimethicone</span><span class="ingr-chip">Iron Oxides</span>';
+
+  const concernCallout = matched.length ? `
+    <div class="concern-callout">
+      <div class="concern-callout-title">Matches your skin concerns</div>
+      <div class="concern-callout-body">
+        This product contains <strong>${matched.length} active ingredient${matched.length>1?'s':''}</strong>
+        targeting your selected concerns:
+        ${matched.map(m => `<span class="callout-chip">${m.ingredient} \u2192 ${m.concerns.join(', ')}</span>`).join('')}
+      </div>
+    </div>` : '';
+
+  document.getElementById('modalContent').innerHTML=`
+    <div class="modal-img" style="background:${cs.g}">
+      <img src="${p.image_url||''}" alt="${p.name}" class="modal-real-img"
+           onerror="modalImgFallback(this)" ${!p.image_url?'style="display:none"':''}>
+      <span class="modal-img-emoji" ${p.image_url?'style="display:none"':''}>${cs.e}</span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-kicker">${p.category}</div>
+      <div class="modal-name">${p.name}</div>
+      <div class="modal-brand">${p.brand}</div>
+      <div class="modal-meta-row">
+        <span class="modal-price">$${p.price.toFixed(2)}</span>
+        <span class="modal-stars">${stars(p.rating)} (${p.rating}/5.0)</span>
+        <span class="modal-tag">${p.finish}</span>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Why recommended</div>
+        <div class="modal-reason">${p.reason}</div>
+      </div>
+      ${concernCallout}
+      <div class="modal-section">
+        <div class="modal-section-title">Key Ingredients</div>
+        <div class="ingr-chips">${ingrHTML}</div>
+      </div>
+      ${shadesHTML(p)}
+      ${colorAdvisorHTML(p)}
+      ${reviewsHTML(p.reviews||[])}
+      <div class="modal-actions">
+        <button class="modal-cart-btn ${wishlisted?'in-cart':''}" id="modal-wish-${pid}"
+                onclick="toggleWish(${pid})">
+          ${wishlisted?'\u2665 Wishlisted':'\u2661 Add to Wishlist'}
+        </button>
+      </div>
+    </div>`;
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function closeModalOnBg(e){ if(e.target===document.getElementById('modalOverlay')) closeModal() }
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal() });
+
+/* ══════════════════════════════════════
+   HELPERS
+══════════════════════════════════════ */
+function stars(r){
+  const n=Math.round(r);
+  return '\u2605'.repeat(n)+'\u2606'.repeat(5-n);
+}
+function cap(s){ return s?s.charAt(0).toUpperCase()+s.slice(1):s }
+
+function renderError(msg){
+  document.getElementById('resultsContent').innerHTML=`
+    <div class="error-box">
+      Could not load recommendations: <strong>${msg}</strong>
+      <small>Make sure the API is running: <code>conda run -n base python api.py</code></small>
+    </div>`;
+  document.getElementById('results').classList.add('open');
+}
+
+function shake(id){
+  const el=document.getElementById(id);
+  el.style.animation='none'; el.offsetHeight;
+  el.style.animation='shake .35s ease';
+}
+
+function shadesHTML(product) {
+  const shades = product.shades || [];
+  if(!shades.length && !product.recommended_shade) return '';
+  const rec = product.recommended_shade;
+  const isReferenceOnly = !!(rec && rec.is_reference_only);
+
+  let recBlock;
+  if(rec){
+    if(isReferenceOnly){
+      const descLine = rec.description
+        ? `<div class="shade-rec-desc">"${rec.description}"</div>`
+        : '';
+      recBlock = `
+        <div class="shade-noinfo">
+          <div class="shade-noinfo-title">We don't have official shade data for ${product.brand}</div>
+          <div class="shade-noinfo-body">
+            ${product.brand} ${product.name} isn't in our shade database.
+            For reference, here's the closest matching shade from a brand we DO have data on \u2014 use it as a
+            <strong>colour reference</strong>, not as the actual product shade name.
+          </div>
+        </div>
+        <div class="shade-rec-row shade-rec-reference">
+          <div class="shade-rec-circle" style="background:${rec.hex}"></div>
+          <div class="shade-rec-label">
+            <div class="shade-rec-title">Reference shade</div>
+            <div class="shade-rec-name">${rec.name} <span style="font-weight:400;font-size:.68rem;color:var(--text-tertiary);font-family:'DM Sans',sans-serif">${rec.hex}</span></div>
+            <div class="shade-rec-meta">From <strong>${rec.brand}</strong> \u00B7 ${rec.product}</div>
+            ${descLine}
+            <div class="shade-rec-tip">Tip: when you shop ${product.brand}, look for a shade with this colour and undertone.</div>
+          </div>
+        </div>`;
+    } else {
+      const note = `<div class="shade-rec-meta">${rec.brand} \u00B7 ${rec.product}${rec.distance!=null?` \u00B7 distance ${rec.distance}`:''}</div>`;
+      const descLine = rec.description
+        ? `<div class="shade-rec-desc">"${rec.description}"</div>`
+        : '';
+      recBlock = `
+        <div class="shade-rec-row">
+          <div class="shade-rec-circle" style="background:${rec.hex}"></div>
+          <div class="shade-rec-label">
+            <div class="shade-rec-title">Your Match</div>
+            <div class="shade-rec-name">${rec.name} <span style="font-weight:400;font-size:.68rem;color:var(--text-tertiary);font-family:'DM Sans',sans-serif">${rec.hex}</span></div>
+            ${note}
+            ${descLine}
+          </div>
+        </div>`;
+    }
+  } else {
+    recBlock = `<div class="shade-rec-empty">Upload a skin photo above to detect your perfect shade match.</div>`;
+  }
+
+  // Show a few nearby shades as named alternatives (not a confusing dot grid)
+  let nearbyBlock = '';
+  if(!isReferenceOnly && shades.length){
+    const nearby = shades.slice(0, 5);
+    const items = nearby.map(s => {
+      const isRec = rec && s.hex === rec.hex && s.name === rec.name;
+      return `<div class="shade-nearby ${isRec?'shade-nearby-match':''}">
+        <div class="shade-nearby-dot" style="background:${s.hex}"></div>
+        <div class="shade-nearby-info">
+          <span class="shade-nearby-name">${s.name}</span>
+          <span class="shade-nearby-hex">${s.hex}</span>
+        </div>
+      </div>`;
+    }).join('');
+    nearbyBlock = `
+      <div class="shade-nearby-title">Available shades from this brand:</div>
+      <div class="shade-nearby-list">${items}</div>`;
+  }
+
+  return `<div class="shade-section">
+    <div class="modal-section-title">Shade Match ${isReferenceOnly?'<span class="shade-source-tag warn">no data</span>':''}</div>
+    ${recBlock}
+    ${nearbyBlock}
+  </div>`;
+}
+
+function concernBadgeHTML(product) {
+  const matched = product.matched_ingredients || [];
+  if(!matched.length) return '';
+  const concernSet = new Set();
+  matched.forEach(m => (m.concerns||[]).forEach(c => concernSet.add(c)));
+  const concerns = Array.from(concernSet);
+  if(!concerns.length) return '';
+  return `<div class="concern-badge" title="Treats: ${concerns.join(', ')}">
+    <span class="concern-badge-count">${matched.length}</span>
+    ingredient${matched.length>1?'s':''} for <strong>${concerns.slice(0,2).join(', ')}${concerns.length>2 ? ` +${concerns.length-2}`:''}</strong>
+  </div>`;
+}
+
+function perfumeStripHTML(product) {
+  if((product.category||'').toLowerCase() !== 'perfume') return '';
+  const sf = product.scent_family || '';
+  const meta = SCENT_FAMILIES[sf];
+  if(!meta) return '';
+  const unisex = product.is_unisex ? '<span class="perfume-unisex">UNISEX</span>' : '';
+  return `<div class="perfume-strip" style="border-color:${meta.hex}">
+    <div class="perfume-strip-icon" style="background:${meta.hex}">${meta.emoji}</div>
+    <div class="perfume-strip-text">
+      <div class="perfume-strip-family"><strong>${meta.label}</strong> ${unisex}</div>
+    </div>
+  </div>`;
+}
+
+function colorMatchHTML(product) {
+  const hex = product.product_hex;
+  if(!hex) return '';
+  const isPalette = !!product.palette_label;
+  const label = isPalette ? product.palette_label : (product.color_family || 'Color');
+  const verdict = product.color_match || '';
+  const verdictEmoji = verdict==='great' ? '\u2713' : verdict==='decent' ? '\u25CB' : '\u00D7';
+  const verdictClass = verdict==='great' ? 'cm-great' : verdict==='decent' ? 'cm-decent' : 'cm-skip';
+  const paletteTag = isPalette ? '<span class="palette-tag">PALETTE</span> ' : '';
+  return `<div class="color-strip ${verdictClass}">
+    <div class="color-strip-dot" style="background:${hex}"></div>
+    <span>${paletteTag}<strong>${label}</strong> ${verdict ? `\u00B7 <span class="cm-verdict">${verdictEmoji} ${verdict}</span>` : ''}</span>
+  </div>`;
+}
+
+function colorAdvisorHTML(product) {
+  const recs = product.recommended_families || [];
+  if(!recs.length) return '';
+  const dots = recs.map(f => `
+    <div class="family-chip">
+      <div class="family-circle" style="background:${f.hex}"></div>
+      <span class="family-name">${f.emoji} ${f.label}</span>
+    </div>
+  `).join('');
+  const hex = product.product_hex || '';
+  const family = product.color_family || '';
+  const verdict = product.color_match || '';
+  const isPalette = !!product.palette_label;
+  let verdictBlock = '';
+  if(hex){
+    const verdictText = verdict==='great' ? '\u2713 Great match for you!'
+                      : verdict==='decent' ? '\u25CB Decent match'
+                      : '\u00D7 May not be your most flattering';
+    const titleText = isPalette ? 'This Palette' : "This Product's Color";
+    const nameText  = isPalette ? product.palette_label : family;
+    const noteText  = isPalette
+      ? 'Approximate palette type \u2014 palettes contain multiple shades'
+      : verdictText;
+    verdictBlock = `
+      <div class="color-rec-row">
+        <div class="color-rec-circle" style="background:${hex}"></div>
+        <div class="color-rec-label">
+          <div class="shade-rec-title">${titleText}</div>
+          <div class="shade-rec-name">${nameText} <span style="font-weight:400;font-size:.68rem;color:var(--text-tertiary);font-family:'DM Sans',sans-serif">${hex}</span></div>
+          <div class="shade-rec-meta">${noteText}</div>
+        </div>
+      </div>`;
+  }
+  return `<div class="shade-section">
+    <div class="modal-section-title">Color Advisor</div>
+    ${verdictBlock}
+    <div class="family-grid-label">Best ${(product.category||'').replace(/^./,c=>c.toUpperCase())} colors for your skin:</div>
+    <div class="family-grid">${dots}</div>
+  </div>`;
+}
+
+function shadeStripHTML(product) {
+  const rec = product.recommended_shade;
+  const hasShadeCat = (product.category||'').match(/^(foundation|concealer|contour)$/);
+  if(!rec){
+    if(hasShadeCat){
+      return `<div class="shade-strip shade-strip-empty">
+        <span>Upload a face photo to match your shade</span>
+      </div>`;
+    }
+    return '';
+  }
+  return `<div class="shade-strip">
+    <div class="shade-strip-dot" style="background:${rec.hex}"></div>
+    <span>Your shade: <span class="shade-strip-name">${rec.name}</span> \u00B7 <em>${rec.hex}</em></span>
+  </div>`;
+}
+
+function reviewsHTML(reviews) {
+  if(!reviews||!reviews.length) return '';
+  const items = reviews.map(r=>`
+    <div class="review-item">
+      <div class="review-header">
+        <span class="review-stars">${'\u2605'.repeat(r.rating)}${'\u2606'.repeat(5-r.rating)}</span>
+        <span class="review-meta">${r.reviewer} \u00B7 ${r.date}</span>
+      </div>
+      <div class="review-title">${r.title}</div>
+      <div class="review-body">"${r.body}"</div>
+    </div>`).join('');
+  return `<div class="reviews-section">
+    <div class="modal-section-title">Customer Reviews</div>
+    ${items}
+  </div>`;
+}
+
+function imgFallback(img){
+  img.style.display='none';
+  const emoji=img.parentNode.querySelector('.prod-cat-emoji');
+  if(emoji) emoji.style.display='';
+}
+function modalImgFallback(img){
+  img.style.display='none';
+  const emoji=img.parentNode.querySelector('.modal-img-emoji');
+  if(emoji) emoji.style.display='flex';
+}
+
+let _toastTimer;
+function showToast(msg){
+  let t=document.getElementById('toast');
+  if(!t){
+    t=document.createElement('div'); t.id='toast';
+    t.style.cssText='position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(10px);background:var(--g-cta);color:var(--text-inverse);padding:.65rem 1.6rem;border-radius:var(--rp);font-size:.85rem;font-weight:500;box-shadow:var(--sh-lg);opacity:0;transition:all .3s var(--ease-out);z-index:500;pointer-events:none;white-space:nowrap;letter-spacing:.2px';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;
+  t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)';
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>{
+    t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(10px)';
+  },2400);
+}
+
+</script>
+</body>
+</html>

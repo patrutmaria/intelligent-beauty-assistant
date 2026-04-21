@@ -1,0 +1,11 @@
+look_id,name,style,occasion,product_ids
+1,Natural Glow,natural,day,"509,287,652,210,80,225"
+2,Office Chic,office,work,"552,952,83,922,213,72"
+3,Glam Evening,glam,night,"160,729,672,111,538,97,801,104,1580"
+4,Bridal Beauty,wedding,wedding,"193,365,83,771,210,224,115,273,561,1430"
+5,Smokey Night Out,evening,party,"219,888,234,948,328,356,1106"
+6,Fresh Minimal,minimal,casual,"279,603,297,571,807"
+7,Festival Glam,festival,casual,"114,83,399,910,704,801"
+8,Editorial Bold,editorial,night,"500,897,950,445,653,1307"
+9,Romantic Date Night,glam,night,"359,266,472,238,598,635,1538"
+10,Everyday Natural,natural,day,"876,583,850,293,698"

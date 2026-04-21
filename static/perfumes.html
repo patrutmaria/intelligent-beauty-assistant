@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Find Your Signature Scent — Beauty Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+:root{
+  --bg:#FBDFE9;--bg-deep:#F2C4D6;--bg-light:#FDE8F0;--ivory:#FFF2F6;
+  --rose:#B4647A;--rose-light:#D07A92;--rose-dark:#9F4C60;--rose-muted:#D4A4C2;
+  --rose-faint:rgba(180,100,122,.10);--rose-glow:rgba(180,100,122,.20);
+  --glass:rgba(255,255,255,.55);--glass-border:rgba(255,255,255,.70);--glass-strong:rgba(255,255,255,.75);
+  --text-primary:#4A1A2E;--text-secondary:#7A4060;--text-tertiary:#B08898;--text-inverse:#FFF2F6;
+  --border:rgba(180,100,122,.18);--border-light:rgba(255,255,255,.50);--surface:#FFFFFF;
+  --g-accent:linear-gradient(135deg,#B4647A 0%,#9F4C60 100%);
+  --g-cta:linear-gradient(135deg,#C06880 0%,#B4647A 40%,#9F4C60 100%);
+  --sh-xs:0 1px 4px rgba(159,76,96,.06);--sh-sm:0 3px 12px rgba(159,76,96,.08);
+  --sh-md:0 6px 24px rgba(159,76,96,.12);--sh-lg:0 12px 48px rgba(159,76,96,.16);
+  --sh-glow:0 6px 30px rgba(159,76,96,.22);
+  --r:24px;--rs:16px;--rp:999px;
+  --ease:cubic-bezier(.4,0,.2,1);--ease-out:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;font-size:19px}
+body{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  background:var(--bg);color:var(--text-primary);
+  line-height:1.75;font-weight:400;min-height:100vh;
+  overflow-x:hidden;position:relative;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 600px 600px at 0% 0%,rgba(255,255,255,.45),transparent),
+    radial-gradient(ellipse 500px 500px at 100% 10%,rgba(234,173,196,.40),transparent),
+    radial-gradient(ellipse 400px 400px at 80% 80%,rgba(255,255,255,.35),transparent),
+    radial-gradient(ellipse 500px 500px at 10% 90%,rgba(212,164,194,.30),transparent);
+}
+body>*{position:relative;z-index:1}
+
+/*Header*/
+header{
+  position:sticky;top:0;z-index:200;
+  background:var(--glass-strong);backdrop-filter:blur(24px) saturate(1.3);
+  border-bottom:1px solid var(--glass-border);
+  padding:.85rem 2.5rem;display:flex;align-items:center;justify-content:space-between;
+}
+.logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.logo-mark{
+  width:40px;height:40px;background:var(--g-accent);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;color:var(--text-inverse);
+  box-shadow:0 3px 12px rgba(159,76,96,.30);
+}
+.logo-text{font-size:1.5rem;font-weight:500;color:var(--text-primary)}
+.header-right{display:flex;align-items:center;gap:1.4rem}
+.header-nav{
+  font-size:1.05rem;font-weight:500;color:var(--text-secondary);
+  text-decoration:none;padding:.3rem 0;border-bottom:1.5px solid transparent;
+  transition:all .25s var(--ease);
+}
+.header-nav:hover{color:var(--rose);border-bottom-color:var(--rose)}
+.header-nav.active{color:var(--rose);border-bottom-color:var(--rose)}
+
+/*Hero*/
+.hero{
+  text-align:center;padding:5rem 2rem 4rem;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#F2C4D6 0%,#EAADC4 50%,#E098B4 100%);
+}
+.hero::before{
+  content:'';position:absolute;width:500px;height:500px;border-radius:50%;
+  top:-180px;right:-120px;background:rgba(255,255,255,.18);
+}
+.hero::after{
+  content:'';position:absolute;width:350px;height:350px;border-radius:50%;
+  bottom:-100px;left:-80px;background:rgba(255,255,255,.12);
+}
+.hero>*{position:relative;z-index:1}
+.hero-icon{font-size:3.5rem;display:block;margin-bottom:.6rem}
+.hero h1{
+  font-size:clamp(2.4rem,5.5vw,3.6rem);color:#fff;
+  line-height:1.1;margin-bottom:.7rem;font-weight:500;letter-spacing:-.03em;
+}
+.hero p{color:rgba(255,255,255,.80);font-size:1.15rem;font-weight:300;max-width:520px;margin:0 auto}
+
+/*Main container*/
+.container{max-width:800px;margin:0 auto;padding:3rem 1.5rem 4rem}
+
+/*Section titles*/
+.section-title{
+  text-align:center;font-size:1.6rem;font-weight:500;
+  color:var(--text-primary);margin-bottom:.4rem;
+}
+.section-sub{
+  text-align:center;font-size:1rem;font-weight:300;
+  color:var(--text-tertiary);margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto;
+}
+
+/*Occasion grid*/
+.occasion-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;
+  margin-bottom:2.5rem;
+}
+.occasion-btn{
+  display:flex;flex-direction:column;align-items:center;gap:.6rem;
+  background:var(--glass-strong);border:1.5px solid var(--glass-border);
+  color:var(--text-secondary);
+  padding:1.8rem 1rem 1.5rem;border-radius:20px;
+  font-size:1.15rem;font-weight:500;font-style:italic;
+  cursor:pointer;transition:all .35s var(--ease);user-select:none;
+  position:relative;overflow:hidden;backdrop-filter:blur(12px);box-shadow:var(--sh-sm);
+}
+.occasion-btn::before{
+  content:'';position:absolute;top:-30%;left:50%;transform:translateX(-50%);
+  width:120%;height:50%;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(255,255,255,.35),transparent 70%);
+}
+.occasion-btn .oc-icon{font-size:2.8rem;position:relative;z-index:1;transition:transform .35s var(--ease-out)}
+.occasion-btn span:last-child{position:relative;z-index:1}
+.occasion-btn:hover{transform:translateY(-5px);box-shadow:var(--sh-lg);border-color:var(--rose-muted)}
+.occasion-btn:hover .oc-icon{transform:scale(1.15) translateY(-2px)}
+.occasion-btn.active{
+  background:var(--g-accent);border-color:var(--rose);color:#fff;font-weight:600;font-style:normal;
+  box-shadow:var(--sh-glow);
+}
+.occasion-btn.active .oc-icon{filter:brightness(10)}
+
+/*Scent family filters*/
+.scent-section-title{
+  text-align:center;font-size:1.2rem;font-weight:500;
+  color:var(--text-secondary);margin-bottom:1.2rem;font-style:italic;
+}
+.scent-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;
+  margin-bottom:2.5rem;max-width:600px;margin-left:auto;margin-right:auto;
+}
+.scent-card{
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  background:var(--glass-strong);border:1.5px solid var(--glass-border);
+  padding:1.4rem 1rem;border-radius:var(--rs);
+  cursor:pointer;transition:all .3s var(--ease);backdrop-filter:blur(8px);box-shadow:var(--sh-xs);
+}
+.scent-card:hover{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:var(--rose-muted)}
+.scent-card.active{
+  background:var(--g-accent);border-color:var(--rose);color:#fff;
+  box-shadow:var(--sh-glow);
+}
+.scent-dot{width:36px;height:36px;border-radius:50%;border:3px solid rgba(255,255,255,.7);box-shadow:var(--sh-sm)}
+.scent-card.active .scent-dot{border-color:rgba(255,255,255,.5)}
+.scent-name{font-size:1rem;font-weight:500}
+.scent-emoji{font-size:1.1rem}
+
+/*CTA*/
+.cta-wrap{text-align:center;margin-bottom:3rem}
+.cta-btn{
+  display:inline-block;padding:1rem 3.5rem;
+  background:var(--g-cta);color:#fff;border:none;border-radius:var(--rp);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.3rem;font-weight:500;cursor:pointer;
+  box-shadow:var(--sh-glow);transition:all .35s var(--ease);
+  position:relative;overflow:hidden;
+}
+.cta-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 40%,rgba(255,255,255,.05) 100%);
+}
+.cta-btn:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 10px 40px rgba(159,76,96,.30)}
+.cta-btn:disabled{opacity:.5;cursor:not-allowed}
+.spinner{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .65s linear infinite;vertical-align:middle;margin-right:.5rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/*Results*/
+.results-divider{
+  display:flex;align-items:center;gap:1rem;margin-bottom:2rem;
+}
+.results-divider::before,.results-divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(to right,transparent,var(--border),transparent);
+}
+.results-divider span{font-size:1.1rem;color:var(--rose-muted);white-space:nowrap;font-style:italic}
+
+.perfume-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.4rem;
+}
+
+/*Perfume card*/
+.perfume-card{
+  background:var(--glass-strong);border:1px solid var(--glass-border);
+  border-radius:var(--rs);box-shadow:var(--sh-sm);
+  overflow:hidden;cursor:pointer;backdrop-filter:blur(12px);
+  transition:transform .3s var(--ease),box-shadow .3s;
+  opacity:0;animation:cardIn .5s var(--ease-out) forwards;
+}
+.perfume-card:hover{transform:translateY(-6px);box-shadow:var(--sh-lg)}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.pc-img{
+  height:180px;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#F5EDE0,#E8D0C0);
+}
+.pc-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .4s var(--ease)}
+.perfume-card:hover .pc-img img{transform:scale(1.05)}
+.pc-emoji{font-size:3.5rem;z-index:1;filter:drop-shadow(0 3px 8px rgba(0,0,0,.1))}
+.pc-scent-badge{
+  position:absolute;top:.8rem;left:.8rem;z-index:2;
+  display:flex;align-items:center;gap:.35rem;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(6px);
+  border-radius:var(--rp);padding:.3rem .8rem;font-size:.78rem;font-weight:500;
+  color:var(--text-primary);
+}
+.pc-scent-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.pc-unisex{
+  position:absolute;top:.8rem;right:.8rem;z-index:2;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(6px);
+  border-radius:var(--rp);padding:.2rem .6rem;font-size:.68rem;font-weight:600;
+  color:var(--text-secondary);letter-spacing:.5px;text-transform:uppercase;
+}
+
+.pc-body{padding:1.2rem 1.3rem 1.4rem}
+.pc-name{font-size:1.15rem;font-weight:500;color:var(--text-primary);margin-bottom:.1rem;line-height:1.3}
+.pc-brand{font-size:.88rem;color:var(--text-tertiary);margin-bottom:.5rem}
+.pc-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+.pc-price{font-size:1.2rem;font-weight:500;color:var(--rose)}
+.pc-stars{color:var(--rose-muted);font-size:.82rem}
+.pc-occasion{
+  display:inline-block;background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--rp);padding:.2rem .7rem;font-size:.78rem;color:var(--text-tertiary);
+}
+.pc-reason{
+  font-size:.85rem;color:var(--text-tertiary);font-style:italic;line-height:1.6;
+  margin-top:.6rem;border-top:1px solid var(--border-light);padding-top:.5rem;
+}
+
+.empty-msg{text-align:center;padding:3rem 1rem;color:var(--text-tertiary);font-style:italic;font-size:1.1rem}
+.error-box{background:var(--glass-strong);border:1px solid var(--border);border-left:3px solid var(--rose);border-radius:var(--rs);padding:1.1rem 1.3rem;color:var(--text-primary);font-size:1rem}
+
+/*Footer*/
+footer{
+  background:linear-gradient(160deg,#E098B4 0%,#D088A4 50%,#C07898 100%);
+  color:rgba(255,255,255,.85);padding:3rem 2rem 2rem;
+  margin-top:3rem;position:relative;overflow:hidden;
+}
+footer::before{
+  content:'';position:absolute;width:400px;height:400px;border-radius:50%;
+  top:-200px;right:-100px;background:rgba(255,255,255,.08);
+}
+footer>*{position:relative;z-index:1}
+.footer-inner{max-width:720px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.footer-logo{font-size:1.6rem;font-weight:500;color:#fff}
+.footer-links{display:flex;gap:1.5rem}
+.footer-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:.92rem;transition:color .2s}
+.footer-links a:hover{color:#fff}
+.footer-divider{width:40px;height:1px;background:rgba(255,255,255,.25)}
+.footer-copy{font-size:.82rem;color:rgba(255,255,255,.5)}
+
+/*Responsive*/
+@media(max-width:640px){
+  .occasion-grid{grid-template-columns:repeat(2,1fr)}
+  .scent-grid{grid-template-columns:repeat(2,1fr)}
+  .perfume-grid{grid-template-columns:1fr 1fr}
+  header{padding:.8rem 1rem}
+}
+@media(max-width:420px){
+  .perfume-grid{grid-template-columns:1fr}
+  .occasion-grid{grid-template-columns:1fr 1fr}
+}
+
+/*Modal (simplified)*/
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(74,26,46,.35);
+  backdrop-filter:blur(12px);z-index:400;
+  display:flex;align-items:center;justify-content:center;padding:1rem;
+  opacity:0;pointer-events:none;transition:opacity .3s var(--ease);
+}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal{
+  background:var(--surface);border-radius:var(--r);
+  width:100%;max-width:480px;max-height:90vh;overflow-y:auto;
+  box-shadow:0 20px 60px rgba(159,76,96,.20);
+  transform:scale(.96) translateY(12px);transition:transform .35s var(--ease-out);
+}
+.modal-overlay.open .modal{transform:scale(1) translateY(0)}
+.modal-close{
+  position:absolute;top:1rem;right:1rem;z-index:2;
+  background:rgba(255,255,255,.85);backdrop-filter:blur(4px);
+  border:1px solid var(--glass-border);border-radius:50%;
+  width:32px;height:32px;font-size:.95rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-secondary);transition:all .2s;
+}
+.modal-close:hover{transform:rotate(90deg)}
+.modal-img{height:240px;display:flex;align-items:center;justify-content:center;position:relative;background:linear-gradient(135deg,#F5EDE0,#E8D0C0)}
+.modal-img-emoji{font-size:5rem}
+.modal-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.modal-body{padding:2rem}
+.modal-kicker{font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:.3rem;font-weight:500}
+.modal-name{font-size:1.7rem;font-weight:500;color:var(--text-primary);margin-bottom:.15rem;line-height:1.2}
+.modal-brand{font-size:1rem;color:var(--text-tertiary);margin-bottom:1rem}
+.modal-row{display:flex;align-items:center;gap:1.2rem;margin-bottom:1rem;flex-wrap:wrap}
+.modal-price{font-size:1.5rem;font-weight:500;color:var(--rose)}
+.modal-stars{color:var(--rose-muted);font-size:.9rem}
+.modal-tag{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--rp);padding:.25rem .8rem;font-size:.8rem;color:var(--text-tertiary)}
+.modal-section{margin-bottom:1.2rem}
+.modal-section-title{font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:.5rem;font-weight:500}
+.modal-reason{font-size:1rem;color:var(--text-primary);line-height:1.75;background:rgba(255,255,255,.5);border-left:3px solid var(--rose-muted);padding:.7rem 1rem;border-radius:0 var(--rs) var(--rs) 0}
+.scent-info{display:flex;align-items:center;gap:.8rem;padding:1rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--rs)}
+.scent-info-dot{width:40px;height:40px;border-radius:50%;border:3px solid #fff;box-shadow:var(--sh-sm);flex-shrink:0}
+.scent-info-text{flex:1}
+.scent-info-label{font-size:.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-tertiary);font-weight:500}
+.scent-info-name{font-size:1.1rem;font-weight:500;color:var(--text-primary)}
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="/">
+    <div class="logo-mark">&#10043;</div>
+    <span class="logo-text">Beauty Assistant</span>
+  </a>
+  <div class="header-right">
+    <a href="/" class="header-nav">Consultation</a>
+    <a href="/perfumes" class="header-nav active">Perfumes</a>
+  </div>
+</header>
+
+<div class="hero">
+  <span class="hero-icon">&#127800;</span>
+  <h1>Find Your<br>Signature Scent</h1>
+  <p>Personalised perfume recommendations matched to your occasion and scent preferences</p>
+</div>
+
+<div class="container">
+
+  <div class="section-title">What's the occasion?</div>
+  <p class="section-sub">Different events call for different scent profiles (optional)</p>
+
+  <div class="occasion-grid" id="occasionGrid">
+    <button class="occasion-btn" data-event="wedding">
+      <span class="oc-icon">&#128141;</span><span>Wedding</span>
+    </button>
+    <button class="occasion-btn" data-event="office">
+      <span class="oc-icon">&#128188;</span><span>Office</span>
+    </button>
+    <button class="occasion-btn" data-event="evening">
+      <span class="oc-icon">&#127769;</span><span>Night Out</span>
+    </button>
+    <button class="occasion-btn" data-event="natural">
+      <span class="oc-icon">&#127800;</span><span>Everyday</span>
+    </button>
+    <button class="occasion-btn" data-event="glam">
+      <span class="oc-icon">&#128139;</span><span>Glam Date</span>
+    </button>
+    <button class="occasion-btn" data-event="festival">
+      <span class="oc-icon">&#127914;</span><span>Festival</span>
+    </button>
+  </div>
+
+  <div class="scent-section-title">Search by scent family</div>
+
+  <div class="scent-grid" id="scentGrid">
+    <button class="scent-card" data-scent="floral">
+      <div class="scent-dot" style="background:#D4A0B0"></div>
+      <span class="scent-name"><span class="scent-emoji">&#127800;</span> Floral</span>
+    </button>
+    <button class="scent-card" data-scent="fresh_citrus">
+      <div class="scent-dot" style="background:#D8D080"></div>
+      <span class="scent-name"><span class="scent-emoji">&#127819;</span> Fresh & Citrus</span>
+    </button>
+    <button class="scent-card" data-scent="woody">
+      <div class="scent-dot" style="background:#8B6845"></div>
+      <span class="scent-name"><span class="scent-emoji">&#127794;</span> Woody</span>
+    </button>
+    <button class="scent-card" data-scent="warm_spicy">
+      <div class="scent-dot" style="background:#A04525"></div>
+      <span class="scent-name"><span class="scent-emoji">&#128293;</span> Warm & Spicy</span>
+    </button>
+    <button class="scent-card" data-scent="sweet_gourmand">
+      <div class="scent-dot" style="background:#D8A060"></div>
+      <span class="scent-name"><span class="scent-emoji">&#127856;</span> Gourmand</span>
+    </button>
+    <button class="scent-card" data-scent="aromatic">
+      <div class="scent-dot" style="background:#7C9858"></div>
+      <span class="scent-name"><span class="scent-emoji">&#127807;</span> Aromatic</span>
+    </button>
+  </div>
+
+  <div class="cta-wrap">
+    <button class="cta-btn" id="discoverBtn" onclick="fetchPerfumes()">
+      Discover My Perfumes
+    </button>
+  </div>
+
+  <div id="results"></div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Beauty Assistant</span>
+    <div class="footer-links">
+      <a href="/">Consultation</a>
+      <a href="/perfumes">Perfumes</a>
+    </div>
+    <div class="footer-divider"></div>
+    <span class="footer-copy">&copy; 2026 Maria P&#259;tru&#539; &middot; AI Master's Thesis</span>
+  </div>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">&#10005;</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+const SCENT_FAMILIES = {
+  floral:         {emoji:'\u{1F338}', label:'Floral',         hex:'#D4A0B0'},
+  fresh_citrus:   {emoji:'\u{1F34B}', label:'Fresh & Citrus', hex:'#D8D080'},
+  woody:          {emoji:'\u{1F332}', label:'Woody & Earthy', hex:'#8B6845'},
+  warm_spicy:     {emoji:'\u{1F525}', label:'Warm & Spicy',   hex:'#A04525'},
+  sweet_gourmand: {emoji:'\u{1F370}', label:'Sweet Gourmand', hex:'#D8A060'},
+  aromatic:       {emoji:'\u{1F33F}', label:'Aromatic Herb',  hex:'#7C9858'},
+};
+
+const pState = { event: null, scents: new Set() };
+let perfumeProducts = [];
+
+// Occasion buttons (toggle)
+document.querySelectorAll('.occasion-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if(btn.classList.contains('active')){
+      btn.classList.remove('active');
+      pState.event = null;
+    } else {
+      document.querySelectorAll('.occasion-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      pState.event = btn.dataset.event;
+    }
+  });
+});
+
+// Scent toggles
+document.querySelectorAll('.scent-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const s = card.dataset.scent;
+    if(pState.scents.has(s)){ pState.scents.delete(s); card.classList.remove('active'); }
+    else { pState.scents.add(s); card.classList.add('active'); }
+  });
+});
+
+async function fetchPerfumes() {
+  if(!pState.event && !pState.scents.size){
+    alert('Pick an occasion or a scent family first');
+    return;
+  }
+  const btn = document.getElementById('discoverBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Finding your scents\u2026';
+  try {
+    const payload = { event_type: pState.event || 'natural', top_k: 8 };
+    if(pState.scents.size) payload.scent_families = Array.from(pState.scents);
+    const res = await fetch('/recommend-perfumes', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Server error');
+    renderResults(data);
+  } catch(e) {
+    document.getElementById('results').innerHTML = `<div class="error-box">${e.message}</div>`;
+  } finally {
+    btn.disabled = false; btn.innerHTML = 'Discover My Perfumes';
+  }
+}
+
+function renderResults(data) {
+  const perfumes = data.perfumes || [];
+  perfumeProducts = perfumes;
+  const container = document.getElementById('results');
+  if(!perfumes.length){
+    container.innerHTML = '<div class="empty-msg">No perfumes found. Try a different occasion or remove scent filters.</div>';
+    return;
+  }
+  let html = `<div class="results-divider"><span>Your AI-curated scents</span></div>`;
+  html += `<div class="perfume-grid">`;
+  perfumes.forEach((p, i) => {
+    const sf = p.scent_family || p.finish || '';
+    const meta = SCENT_FAMILIES[sf] || {};
+    const label = meta.label || sf.replace('_',' ');
+    const hex = meta.hex || '#D4A0B0';
+    const emoji = meta.emoji || '\u{1F338}';
+    html += `
+    <div class="perfume-card" style="animation-delay:${i*90}ms" onclick="openModal(${i})">
+      <div class="pc-img">
+        <img src="${p.image_url||''}" alt="${p.name}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display=''" ${!p.image_url?'style="display:none"':''}>
+        <span class="pc-emoji" ${p.image_url?'style="display:none"':''}>${emoji}</span>
+        <span class="pc-scent-badge"><span class="pc-scent-dot" style="background:${hex}"></span>${label}</span>
+        ${p.is_unisex ? '<span class="pc-unisex">Unisex</span>' : ''}
+      </div>
+      <div class="pc-body">
+        <div class="pc-name">${p.name}</div>
+        <div class="pc-brand">${p.brand}</div>
+        <div class="pc-meta">
+          <span class="pc-price">$${p.price.toFixed(2)}</span>
+          <span class="pc-stars">${stars(p.rating)}</span>
+        </div>
+        <span class="pc-occasion">${cap(data.event_type)}</span>
+        ${p.reason ? `<div class="pc-reason">${p.reason}</div>` : ''}
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  container.innerHTML = html;
+  container.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function openModal(idx) {
+  const p = perfumeProducts[idx]; if(!p) return;
+  const sf = p.scent_family || p.finish || '';
+  const meta = SCENT_FAMILIES[sf] || {};
+  const emoji = meta.emoji || '\u{1F338}';
+  const hex = meta.hex || '#D4A0B0';
+  const label = meta.label || sf.replace('_',' ');
+
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-img">
+      <img src="${p.image_url||''}" alt="${p.name}"
+           onerror="this.style.display='none';this.nextElementSibling.style.display=''" ${!p.image_url?'style="display:none"':''}>
+      <span class="modal-img-emoji" ${p.image_url?'style="display:none"':''}>${emoji}</span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-kicker">Perfume</div>
+      <div class="modal-name">${p.name}</div>
+      <div class="modal-brand">${p.brand}</div>
+      <div class="modal-row">
+        <span class="modal-price">$${p.price.toFixed(2)}</span>
+        <span class="modal-stars">${stars(p.rating)} (${p.rating}/5)</span>
+        ${p.is_unisex ? '<span class="modal-tag">Unisex</span>' : ''}
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Scent Family</div>
+        <div class="scent-info">
+          <div class="scent-info-dot" style="background:${hex}"></div>
+          <div class="scent-info-text">
+            <div class="scent-info-label">Family</div>
+            <div class="scent-info-name">${emoji} ${label}</div>
+          </div>
+        </div>
+      </div>
+      ${p.reason ? `<div class="modal-section">
+        <div class="modal-section-title">Why recommended</div>
+        <div class="modal-reason">${p.reason}</div>
+      </div>` : ''}
+    </div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal() });
+
+function stars(r){ const n=Math.round(r); return '\u2605'.repeat(n)+'\u2606'.repeat(5-n) }
+function cap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s }
+</script>
+</body>
+</html>

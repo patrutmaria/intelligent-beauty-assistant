@@ -1,0 +1,50 @@
+#  Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+#  IDE / Editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+#  Claude Code local config
+.claude/
+
+#  OS files
+.DS_Store
+Thumbs.db
+
+# MODELS
+# VGAE checkpoint, regenerates automatically on first request
+# or by running: python train_vgae.py (~1 minute)
+models/vgae_beauty.pt
+
+# CNN classifiers (skin type + acne), pre-trained SavedModel format
+# Too large for Git (~46MB total). Download separately or use Git LFS.
+# The app works without them (falls back to heuristic detection).
+models/acne_cnn/
+models/skin_cnn/
+
+# Embedding visualization, generated during training, not code
+models/vgae_beauty_embeddings.png
+
+# RAW DATA
+# Original Sephora HuggingFace dump (8,494 rows, 7.5MB)
+# Only used by scripts/import_sephora.py to produce products.csv
+# Not needed at runtime, the processed products.csv is what the app uses
+data/sephora_raw.csv
+
+# The Pudding foundation shade dataset (6,816 rows, 2.2MB)
+# Only used by scripts/merge_shades.py to produce shades.json
+# Not needed at runtime, the merged shades.json is what the app uses
+data/pudding_allShades.csv
+
+# Test images used during development
+data/test_face.jpg

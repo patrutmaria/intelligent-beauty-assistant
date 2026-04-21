@@ -1,0 +1,19 @@
+# Web interface (API + frontend server)
+fastapi>=0.110.0
+uvicorn>=0.29.0
+python-multipart>=0.0.9
+
+# Deep learning & graph neural networks
+torch>=2.0.0
+torch-geometric>=2.5.0
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+
+# Visualization (optional, for embedding plots)
+matplotlib>=3.7.0
+
+# Image processing for shade / undertone analysis
+Pillow>=10.0.0

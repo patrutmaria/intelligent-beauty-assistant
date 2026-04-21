@@ -1,0 +1,31 @@
+ingredient_id,name,type,effect,safe_for
+1,Hyaluronic Acid,humectant,moisturizing,"dry,normal,all"
+2,Glycerin,humectant,moisturizing,all
+3,Niacinamide,antioxidant,oil_control,"oily,combination,all"
+4,Salicylic Acid,surfactant,oil_control,"oily,combination"
+5,Zinc Oxide,SPF,protecting,all
+6,Titanium Dioxide,pigment,coverage,all
+7,Vitamin C,antioxidant,brightening,all
+8,Kaolin,emollient,oil_control,"oily,combination"
+9,Talc,emollient,coverage,all
+10,Dimethicone,emollient,smoothing,all
+11,Squalane,emollient,moisturizing,"dry,normal"
+12,Mica,pigment,coverage,all
+13,Iron Oxides,pigment,coverage,all
+14,Aloe Vera,humectant,soothing,all
+15,Vitamin E,antioxidant,moisturizing,"dry,normal"
+16,Peptides,film_former,anti_aging,"normal,dry"
+17,Ceramides,emollient,moisturizing,"dry,normal"
+18,Bentonite Clay,surfactant,oil_control,"oily,combination"
+19,Castor Oil,emollient,smoothing,all
+20,Argan Oil,emollient,moisturizing,"dry,normal"
+21,Caffeine,antioxidant,brightening,all
+22,Allantoin,humectant,soothing,all
+23,Panthenol,humectant,soothing,all
+24,Silica,emollient,oil_control,"oily,all"
+25,SPF 30,SPF,protecting,all
+26,Tocopherol,antioxidant,anti_aging,all
+27,Retinol,film_former,anti_aging,"dry,normal"
+28,Cyclopentasiloxane,emollient,smoothing,all
+29,Carbomer,film_former,smoothing,all
+30,Bismuth Oxychloride,pigment,coverage,all
