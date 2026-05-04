@@ -223,92 +223,97 @@ async def analyze_undertone(
     if skin_photo is None and vein_photo is None:
         raise HTTPException(status_code=422, detail="Provide at least one photo.")
 
-    from skin.shade_analyzer import analyze_skin_photo, analyze_vein_photo, combine_results
-    from skin.face_skin_extractor import extract_skin_tone
-    from skin.skin_heuristics import analyze as heuristic_analyze
     try:
-        from skin.skin_classifier import classify as cnn_classify
-    except Exception:
-        cnn_classify = None
+        from skin.shade_analyzer import analyze_skin_photo, analyze_vein_photo, combine_results
+        from skin.face_skin_extractor import extract_skin_tone
+        from skin.skin_heuristics import analyze as heuristic_analyze
+        try:
+            from skin.skin_classifier import classify as cnn_classify
+        except Exception:
+            cnn_classify = None
 
-    skin_result = vein_result = None
-    skin_bytes = None
+        skin_result = vein_result = None
+        skin_bytes = None
 
-    try:
         if skin_photo is not None:
             skin_bytes = await skin_photo.read()
             if skin_bytes:
-                skin_result = analyze_skin_photo(skin_bytes)
-    except Exception as e:
-        print(f"[API] Skin photo analysis failed: {e}")
+                try:
+                    skin_result = analyze_skin_photo(skin_bytes)
+                except Exception as e:
+                    print(f"[API] Skin photo analysis failed: {e}")
 
-    try:
         if vein_photo is not None:
             data = await vein_photo.read()
             if data:
-                vein_result = analyze_vein_photo(data)
+                try:
+                    vein_result = analyze_vein_photo(data)
+                except Exception as e:
+                    print(f"[API] Vein photo analysis failed: {e}")
+
+        final = combine_results(skin_result, vein_result)
+
+        if skin_bytes:
+            skin_hex_value = None
+            try:
+                face = extract_skin_tone(skin_bytes)
+                if face.get("available"):
+                    skin_hex_value = face["hex"]
+                    final["skin_rgb"] = face["rgb"]
+                    final["skin_regions"] = face.get("regions")
+                    final["skin_source"] = "mediapipe"
+            except Exception as e:
+                print(f"[API] MediaPipe extraction failed: {e}")
+
+            if not skin_hex_value:
+                skin_hex_value = final.get("hex_color")
+                final["skin_source"] = "lab"
+
+            if skin_hex_value:
+                final["skin_hex"] = skin_hex_value
+                final["hex_color"] = skin_hex_value
+
+            try:
+                h = heuristic_analyze(skin_bytes)
+                if h.get("available"):
+                    heur_skin = h["skin_type"]
+                    heur_acne = h["acne"]
+                    heur_skin_conf = h["skin_confidence"]
+                    heur_acne_conf = h["acne_confidence"]
+
+                    cnn_skin = cnn_acne = None
+                    if cnn_classify is not None:
+                        try:
+                            cnn = cnn_classify(skin_bytes)
+                            if cnn.get("available"):
+                                cnn_skin = cnn.get("skin_type")
+                                cnn_acne = cnn.get("acne")
+                        except Exception:
+                            pass
+
+                    if cnn_skin == heur_skin and heur_skin is not None:
+                        heur_skin_conf = round(min(0.95, heur_skin_conf + 0.10), 2)
+                    if cnn_acne == heur_acne and heur_acne is not None:
+                        heur_acne_conf = round(min(0.95, heur_acne_conf + 0.10), 2)
+
+                    final["suggested_skin_type"] = heur_skin
+                    final["suggested_skin_conf"] = heur_skin_conf
+                    final["suggested_acne"] = heur_acne
+                    final["suggested_acne_conf"] = heur_acne_conf
+                    final["suggested_signals"] = h.get("skin_signals", {})
+                    if cnn_skin and cnn_skin != heur_skin:
+                        final["cnn_disagreement"] = {"cnn_skin_type": cnn_skin}
+            except Exception as e:
+                print(f"[API] Skin heuristic failed: {e}")
+
+        return _json(final)
+
     except Exception as e:
-        print(f"[API] Vein photo analysis failed: {e}")
-
-    final = combine_results(skin_result, vein_result)
-
-    if skin_bytes:
-        # MediaPipe face skin tone extraction
-        skin_hex_value = None
-        try:
-            face = extract_skin_tone(skin_bytes)
-            if face.get("available"):
-                skin_hex_value = face["hex"]
-                final["skin_rgb"] = face["rgb"]
-                final["skin_regions"] = face.get("regions")
-                final["skin_source"] = "mediapipe"
-        except Exception as e:
-            print(f"[API] MediaPipe extraction failed: {e}")
-
-        if not skin_hex_value:
-            skin_hex_value = final.get("hex_color")
-            final["skin_source"] = "lab"
-
-        if skin_hex_value:
-            final["skin_hex"] = skin_hex_value
-            final["hex_color"] = skin_hex_value
-
-        # Heuristic skin type + acne detection with optional CNN cross-check
-        try:
-            h = heuristic_analyze(skin_bytes)
-            if h.get("available"):
-                heur_skin = h["skin_type"]
-                heur_acne = h["acne"]
-                heur_skin_conf = h["skin_confidence"]
-                heur_acne_conf = h["acne_confidence"]
-
-                cnn_skin = cnn_acne = None
-                if cnn_classify is not None:
-                    try:
-                        cnn = cnn_classify(skin_bytes)
-                        if cnn.get("available"):
-                            cnn_skin = cnn.get("skin_type")
-                            cnn_acne = cnn.get("acne")
-                    except Exception:
-                        pass
-
-                # Boost confidence when CNN agrees
-                if cnn_skin == heur_skin and heur_skin is not None:
-                    heur_skin_conf = round(min(0.95, heur_skin_conf + 0.10), 2)
-                if cnn_acne == heur_acne and heur_acne is not None:
-                    heur_acne_conf = round(min(0.95, heur_acne_conf + 0.10), 2)
-
-                final["suggested_skin_type"] = heur_skin
-                final["suggested_skin_conf"] = heur_skin_conf
-                final["suggested_acne"] = heur_acne
-                final["suggested_acne_conf"] = heur_acne_conf
-                final["suggested_signals"] = h.get("skin_signals", {})
-                if cnn_skin and cnn_skin != heur_skin:
-                    final["cnn_disagreement"] = {"cnn_skin_type": cnn_skin}
-        except Exception as e:
-            print(f"[API] Skin heuristic failed: {e}")
-
-    return JSONResponse(content=final)
+        print(f"[API] analyze-undertone crashed: {e}")
+        return JSONResponse(
+            content={"error": "Analysis failed", "detail": str(e)},
+            status_code=200,
+        )
 
 
 #Perfume recommendations
