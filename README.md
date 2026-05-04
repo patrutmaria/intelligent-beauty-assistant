@@ -8,7 +8,7 @@ A web-based AI beauty consultation app that recommends makeup products and perfu
 
 The app provides a personalised beauty experience: you tell it your occasion, upload a photo for skin analysis, set your preferences, and it recommends a complete makeup routine with shade-matched foundations and curated perfumes.
 
-A **graph neural network** encodes relationships between 1,600 products, 200 user profiles, 30 ingredients, and 10 curated looks into a shared latent space. New users get matched through cold-start embedding similarity, with content-based boosting for skin type, undertone, finish, budget, and skin concerns.
+A **Variational Graph AutoEncoder (VGAE)** encodes relationships between 1,600 products, 200 user profiles, 30 ingredients, and 10 curated looks into a shared latent space. New users get matched through cold-start embedding similarity, with content-based boosting for skin type, undertone, finish, budget, and skin concerns.
 
 ---
 
