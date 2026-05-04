@@ -109,14 +109,48 @@ def extract_skin_tone(image_bytes: bytes) -> dict:
             return {"available": False, "error": "not enough lit skin pixels in face oval"}
 
         from .shade_analyzer import _dominant_color
-        r, g, b = _dominant_color(skin_pixels)
+
+        REGIONS = {
+            "forehead":    [10, 109, 67, 103, 54, 21, 162, 127, 234, 93, 132, 58, 172, 136, 150, 149, 148, 152],
+            "left_cheek":  [187, 207, 206, 205, 50, 117, 118, 119, 100, 142, 203, 36, 101],
+            "right_cheek": [411, 427, 426, 425, 280, 346, 347, 348, 329, 371, 423, 266, 330],
+            "chin":        [152, 148, 176, 149, 150, 136, 172, 58, 377, 400, 378, 379, 365, 397],
+        }
+
+        region_colors = {}
+        for region_name, region_landmarks in REGIONS.items():
+            valid_lms = [i for i in region_landmarks if i < len(landmarks)]
+            if len(valid_lms) < 3:
+                continue
+            region_poly = np.array(
+                [[int(landmarks[i].x * w), int(landmarks[i].y * h)] for i in valid_lms],
+                dtype=np.int32)
+            region_mask = np.zeros((h, w), dtype=np.uint8)
+            cv2.fillPoly(region_mask, [region_poly], 255)
+            region_mask = cv2.erode(region_mask, np.ones((5, 5), np.uint8), iterations=1)
+            region_skin = (region_mask > 0) & ycbcr_skin
+            pixels = rgb[region_skin]
+            if len(pixels) >= 30:
+                rc, gc, bc = _dominant_color(pixels)
+                region_colors[region_name] = (int(rc), int(gc), int(bc))
+
+        if region_colors:
+            weights = {"forehead": 0.15, "left_cheek": 0.30, "right_cheek": 0.30, "chin": 0.25}
+            total_w = sum(weights.get(k, 0.25) for k in region_colors)
+            avg_r = sum(region_colors[k][0] * weights.get(k, 0.25) for k in region_colors) / total_w
+            avg_g = sum(region_colors[k][1] * weights.get(k, 0.25) for k in region_colors) / total_w
+            avg_b = sum(region_colors[k][2] * weights.get(k, 0.25) for k in region_colors) / total_w
+            r, g, b = int(round(avg_r)), int(round(avg_g)), int(round(avg_b))
+        else:
+            r, g, b = _dominant_color(skin_pixels)
+            r, g, b = int(r), int(g), int(b)
 
         return {
             "available": True,
-            "rgb":       (int(r), int(g), int(b)),
+            "rgb":       (r, g, b),
             "hex":       _rgb_to_hex((r, g, b)),
             "n_pixels":  int(combined_mask.sum()),
-            "regions":   None,
+            "regions":   {k: _rgb_to_hex(v) for k, v in region_colors.items()},
         }
     except Exception as e:
         return {"available": False, "error": f"mediapipe: {e}"}

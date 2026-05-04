@@ -23,9 +23,11 @@ def _split_edges(edge_index, val_ratio=0.10, test_ratio=0.10, seed=42):
 
 def train_vgae(graph_data, hidden_channels=64, out_channels=32, epochs=200,
                lr=0.01, beta=1.0, model_save_path="models/vgae_beauty.pt",
-               verbose=True):
+               verbose=True, beta_warmup=0, seed=42):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    train_edges, val_edges, test_edges = _split_edges(graph_data.edge_index)
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    train_edges, val_edges, test_edges = _split_edges(graph_data.edge_index, seed=seed)
 
     in_channels = graph_data.x.size(1)
     model = VGAEBeauty(in_channels, hidden_channels, out_channels).to(device)
@@ -48,7 +50,11 @@ def train_vgae(graph_data, hidden_channels=64, out_channels=32, epochs=200,
         optimizer.zero_grad()
         z = model.encode(x, t_edges)
         neg_edges = negative_sampling(t_edges, num_nodes=graph_data.num_nodes, num_neg_samples=t_edges.size(1))
-        loss = model.total_loss(z, t_edges, neg_edges, beta=beta)
+        if beta_warmup > 0:
+            cur_beta = beta * min(1.0, epoch / beta_warmup)
+        else:
+            cur_beta = beta
+        loss = model.total_loss(z, t_edges, neg_edges, beta=cur_beta)
         loss.backward()
         optimizer.step()
 

@@ -7,11 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
   <style>
-/* ══════════════════════════════════════
-   LUXURY DESIGN TOKENS
-══════════════════════════════════════ */
 :root{
-  /*─ Pink Mist palette (from inspiration)─ */
+  /* Pink Mist palette (from inspiration) */
   --pink-mist:#F7DAE7;
   --bubblegum:#D4A4C2;
   --cherry:#B4647A;
@@ -107,9 +104,9 @@ body::after{
 
 body > *{position:relative;z-index:1}
 
-/* ══════════════════════════════════════
+/* 
    HEADER
-══════════════════════════════════════ */
+ */
 header{
   position:sticky;top:0;z-index:200;
   background:var(--glass-strong);backdrop-filter:blur(24px) saturate(1.3);
@@ -134,13 +131,22 @@ header.scrolled{box-shadow:var(--sh-md)}
 .header-right{display:flex;align-items:center;gap:1.4rem}
 .header-nav{
   font-family:'Cormorant Garamond',Georgia,serif;
-  font-size:1.05rem;font-weight:500;color:var(--text-secondary);
+  font-size:1rem;font-weight:500;color:var(--rose);
   text-decoration:none;letter-spacing:.02em;
-  padding:.3rem 0;border-bottom:1.5px solid transparent;
-  transition:all .25s var(--ease);
+  padding:.5rem 1.3rem;border-radius:var(--rp);
+  background:var(--glass);border:1.5px solid var(--rose-muted);
+  transition:all .3s var(--ease);
+  display:flex;align-items:center;gap:.4rem;
+  backdrop-filter:blur(8px);
 }
-.header-nav:hover{color:var(--rose);border-bottom-color:var(--rose)}
-.header-nav.active{color:var(--rose);border-bottom-color:var(--rose)}
+.header-nav:hover{
+  background:var(--g-accent);color:#fff;border-color:var(--rose);
+  transform:translateY(-1px);box-shadow:var(--sh-glow);
+}
+.header-nav.active{
+  background:var(--g-accent);color:#fff;border-color:var(--rose);
+  box-shadow:var(--sh-glow);
+}
 .header-tag{font-size:.7rem;color:var(--text-tertiary);letter-spacing:.6px;text-transform:uppercase}
 
 .cart-header-btn{
@@ -159,9 +165,9 @@ header.scrolled{box-shadow:var(--sh-md)}
   display:flex;align-items:center;justify-content:center;
 }
 
-/* ══════════════════════════════════════
+/* 
    HERO
-══════════════════════════════════════ */
+ */
 .hero{
   text-align:center;padding:4.5rem 2rem 4rem;position:relative;overflow:hidden;
   background:linear-gradient(160deg,#F2C4D6 0%,#EAADC4 50%,#E098B4 100%);
@@ -219,9 +225,9 @@ header.scrolled{box-shadow:var(--sh-md)}
   color:rgba(255,255,255,.70);backdrop-filter:blur(8px);
 }
 
-/* ══════════════════════════════════════
+/* 
    PROGRESS INDICATOR
-══════════════════════════════════════ */
+ */
 .progress-bar{
   display:flex;align-items:center;justify-content:center;gap:0;
   padding:1.8rem 2.5rem;max-width:760px;margin:-1.5rem auto 0;
@@ -262,9 +268,9 @@ header.scrolled{box-shadow:var(--sh-md)}
 }
 .progress-line.filled{background:var(--rose-muted)}
 
-/* ══════════════════════════════════════
+/* 
    CONTAINER & STEPS
-══════════════════════════════════════ */
+ */
 .container{max-width:720px;margin:0 auto;padding:2rem 1.5rem 6rem}
 
 .wizard-step{
@@ -327,9 +333,9 @@ header.scrolled{box-shadow:var(--sh-md)}
 }
 .card:hover{box-shadow:var(--sh-lg);transform:translateY(-2px)}
 
-/* ══════════════════════════════════════
+/* 
    EVENT / OCCASION BUTTONS
-══════════════════════════════════════ */
+ */
 .event-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
 .event-btn{
   display:flex;flex-direction:column;align-items:center;gap:.6rem;
@@ -376,9 +382,9 @@ header.scrolled{box-shadow:var(--sh-md)}
 .event-btn.active::before{background:radial-gradient(ellipse,rgba(255,255,255,.15),transparent 70%)}
 .event-btn.active::after{opacity:1;background:radial-gradient(circle at 50% 60%,rgba(255,255,255,.10),transparent 70%)}
 
-/* ══════════════════════════════════════
+/* 
    PROFILE CHIPS (skin type / undertone / lightness)
-══════════════════════════════════════ */
+ */
 .profile-row{margin-bottom:1.8rem}
 .profile-label{
   font-size:.85rem;font-weight:500;color:var(--text-tertiary);
@@ -437,9 +443,9 @@ header.scrolled{box-shadow:var(--sh-md)}
 .skin-input::placeholder{color:var(--text-tertiary);font-style:italic;font-weight:300}
 .card-desc{font-size:1.02rem;color:var(--text-tertiary);font-weight:300;margin-bottom:1.5rem;line-height:1.75}
 
-/* ══════════════════════════════════════
+/* 
    SHADE MATCHING / UPLOAD
-══════════════════════════════════════ */
+ */
 .optional-tag{
   font-family:inherit;font-size:.72rem;font-weight:500;
   color:var(--text-tertiary);background:var(--cream);
@@ -551,6 +557,15 @@ header.scrolled{box-shadow:var(--sh-md)}
   font-size:.85rem;color:var(--text-tertiary);font-style:italic;margin-top:.3rem;
 }
 
+.low-conf-warning{
+  margin-top:.6rem;padding:.7rem 1rem;
+  background:linear-gradient(135deg,#FFF0F5,#FFE4EE);
+  border:1px solid var(--rose-muted);border-left:3px solid var(--rose);
+  border-radius:var(--rs);
+  font-size:.88rem;color:var(--text-secondary);line-height:1.6;
+}
+.low-conf-warning strong{color:var(--rose-dark)}
+
 .hex-picker-row{display:flex;align-items:center;gap:.55rem;margin-top:.7rem;padding-top:.6rem;border-top:1px dashed var(--border)}
 .hex-picker-label{font-size:.92rem;color:var(--gold-dark);font-weight:500}
 .hex-picker{width:34px;height:34px;border:3px solid #fff;box-shadow:0 0 0 1.5px var(--gold),var(--sh-sm);border-radius:50%;cursor:pointer;padding:0;background:none;-webkit-appearance:none;appearance:none}
@@ -561,9 +576,9 @@ header.scrolled{box-shadow:var(--sh-md)}
 .hex-picker-reset:hover{border-color:var(--gold);color:var(--gold-dark);transform:rotate(-45deg)}
 .hex-picker-hint{font-size:.88rem;color:var(--text-tertiary);font-style:italic;margin-top:.5rem}
 
-/* ══════════════════════════════════════
+/* 
    CONCERNS
-══════════════════════════════════════ */
+ */
 .concerns-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.8rem}
 .concern-chip{
   display:flex;align-items:center;justify-content:center;gap:.45rem;
@@ -596,9 +611,9 @@ header.scrolled{box-shadow:var(--sh-md)}
 .dual-agree{background:#E8F5E4;border:1px solid #88C878;color:#2A5018}
 .dual-mixed{background:#FFF3E0;border:1px solid #E0B060;color:#704818}
 
-/* ══════════════════════════════════════
+/* 
    BUDGET
-══════════════════════════════════════ */
+ */
 .toggle-row{display:flex;align-items:center;gap:.7rem;cursor:pointer;margin-bottom:.9rem;color:var(--text-secondary);font-size:1rem}
 .toggle-row input[type="checkbox"]{accent-color:var(--rose);width:16px;height:16px;cursor:pointer}
 .budget-slider-wrap{display:none}
@@ -609,9 +624,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 .budget-row{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-tertiary);margin-top:.3rem}
 .budget-val{text-align:center;font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--rose);margin-top:.5rem}
 
-/* ══════════════════════════════════════
+/* 
    CATEGORY PICKER
-══════════════════════════════════════ */
+ */
 .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.8rem;margin-bottom:1rem}
 .cat-chip{
   display:flex;align-items:center;justify-content:center;gap:.45rem;
@@ -632,9 +647,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 .cat-mini-btn:hover{border-color:var(--rose-muted);color:var(--rose)}
 .cat-status{font-size:.85rem;color:var(--text-tertiary);font-style:italic}
 
-/* ══════════════════════════════════════
+/* 
    CTA BUTTONS
-══════════════════════════════════════ */
+ */
 .cta-row{display:flex;flex-direction:column;gap:.8rem;margin-top:.5rem}
 .cta-btn{
   width:100%;padding:1.2rem 2rem;
@@ -696,9 +711,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 }
 .step-nav-btn.next:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(139,34,82,.25)}
 
-/* ══════════════════════════════════════
+/* 
    ROUTINE TIMELINE
-══════════════════════════════════════ */
+ */
 .routine-header{
   background:var(--g-accent-warm);color:var(--text-inverse);
   border-radius:var(--r);padding:2rem 2.2rem;margin-bottom:1.8rem;
@@ -764,9 +779,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 }
 .routine-add-all:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(139,34,82,.25)}
 
-/* ══════════════════════════════════════
+/* 
    RESULTS
-══════════════════════════════════════ */
+ */
 #results{display:none;margin-top:2.5rem}
 #results.open{display:block;animation:stepFadeIn .5s var(--ease-out) forwards}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
@@ -820,9 +835,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 }
 .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem;margin-bottom:2rem}
 
-/* ══════════════════════════════════════
+/* 
    PRODUCT CARD
-══════════════════════════════════════ */
+ */
 .product-card{
   background:var(--glass-strong);border:1px solid var(--glass-border);
   border-radius:var(--rs);box-shadow:var(--sh-sm);
@@ -884,9 +899,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 .alt-chip{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--rp);padding:.3rem 1rem;font-size:.78rem;color:var(--text-secondary);transition:all .2s;font-weight:500;backdrop-filter:blur(4px)}
 .alt-chip:hover{background:var(--glass-strong);transform:translateY(-2px);box-shadow:var(--sh-sm)}
 
-/* ══════════════════════════════════════
+/* 
    MODAL
-══════════════════════════════════════ */
+ */
 .modal-overlay{
   position:fixed;inset:0;
   background:rgba(74,26,46,.35);
@@ -966,6 +981,18 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 .shade-rec-empty{font-size:.76rem;color:var(--text-tertiary);font-style:italic}
 
 /* Nearby shades list (replaces dot grid) */
+/* Shade match confidence bar */
+.shade-conf-bar{display:flex;align-items:center;gap:.5rem;margin:.4rem 0}
+.shade-conf-bar .shade-conf-fill{height:4px;border-radius:4px;transition:width .6s var(--ease-out)}
+.shade-conf-bar{position:relative;flex:1;height:4px;background:var(--glass);border-radius:4px;overflow:visible}
+.shade-conf-fill{position:absolute;top:0;left:0;height:100%}
+.shade-conf-high{background:linear-gradient(90deg,#7EB84A,#4EAA3E)}
+.shade-conf-mid{background:linear-gradient(90deg,#E0B060,#D09830)}
+.shade-conf-low{background:linear-gradient(90deg,var(--rose-muted),var(--rose))}
+.shade-conf-label{position:absolute;right:0;top:-1.2rem;font-size:.78rem;color:var(--text-tertiary);white-space:nowrap}
+.shade-explanation{font-size:.85rem;color:var(--text-secondary);font-style:italic;line-height:1.6;margin:.3rem 0}
+.shade-nearby-conf{font-size:.72rem;color:var(--text-tertiary);margin-left:.3rem}
+
 .shade-nearby-title{font-size:.85rem;color:var(--text-tertiary);font-style:italic;margin-top:.8rem;margin-bottom:.5rem}
 .shade-nearby-list{display:flex;flex-direction:column;gap:.4rem}
 .shade-nearby{
@@ -1051,9 +1078,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 .modal-cart-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(139,34,82,.25)}
 .modal-cart-btn.in-cart{background:linear-gradient(135deg,#43A047,#1B5E20)}
 
-/* ══════════════════════════════════════
+/* 
    WISHLIST PANEL
-══════════════════════════════════════ */
+ */
 .cart-overlay{position:fixed;inset:0;background:rgba(74,26,46,.25);z-index:300;opacity:0;pointer-events:none;transition:opacity .3s}
 .cart-overlay.open{opacity:1;pointer-events:auto}
 
@@ -1095,9 +1122,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
 .error-box{background:var(--surface-warm);border:1px solid var(--border);border-left:3px solid var(--rose);border-radius:var(--rs);padding:1.1rem 1.3rem;color:var(--text-primary);font-size:.88rem}
 .error-box small{display:block;margin-top:.4rem;color:var(--text-tertiary)}
 
-/* ══════════════════════════════════════
+/* 
    INTRO / LANDING SECTION
-══════════════════════════════════════ */
+ */
 .intro{
   max-width:820px;margin:0 auto;padding:3.5rem 2rem 2rem;position:relative;z-index:1;
 }
@@ -1322,7 +1349,7 @@ footer>*{position:relative;z-index:1}
     <span class="logo-text">Beauty Assistant</span>
   </a>
   <div class="header-right">
-    <a href="/perfumes" class="header-nav">Perfumes</a>
+    <a href="/perfumes" class="header-nav">&#127800; Perfumes</a>
     <button class="cart-header-btn" onclick="toggleWishlist()">
       &#9829;
       <span class="cart-count" id="wishCount">0</span>
@@ -1715,9 +1742,9 @@ footer>*{position:relative;z-index:1}
 </footer>
 
 <script>
-/* ══════════════════════════════════════
+/* 
    CATEGORY STYLES
-══════════════════════════════════════ */
+ */
 const CAT = {
   foundation:  {g:'linear-gradient(135deg,#F0E0D4,#D8C0A8)',  e:'\u{1FAD9}' },
   concealer:   {g:'linear-gradient(135deg,#F2E4D2,#DCC8A0)',  e:'\u{1F58A}\uFE0F'},
@@ -1742,9 +1769,9 @@ const SCENT_FAMILIES = {
 };
 const catStyle = c => CAT[c?.toLowerCase()] || {g:'linear-gradient(135deg,#D8C0B0,#A88070)',e:'\u2743'};
 
-/* ══════════════════════════════════════
+/* 
    START CONSULTATION
-══════════════════════════════════════ */
+ */
 function startConsultation() {
   document.getElementById('introSection').style.display = 'none';
   document.getElementById('progressBar').classList.remove('hidden');
@@ -1759,9 +1786,9 @@ function backToIntro() {
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ══════════════════════════════════════
+/* 
    WIZARD NAVIGATION
-══════════════════════════════════════ */
+ */
 let currentStep = 0;
 const totalSteps = 5;
 
@@ -1792,16 +1819,16 @@ function goToStep(n) {
 function nextStep() { goToStep(currentStep + 1) }
 function prevStep() { goToStep(currentStep - 1) }
 
-/* ══════════════════════════════════════
+/* 
    HEADER SCROLL EFFECT
-══════════════════════════════════════ */
+ */
 window.addEventListener('scroll', () => {
   document.getElementById('mainHeader').classList.toggle('scrolled', window.scrollY > 10);
 });
 
-/* ══════════════════════════════════════
+/* 
    STATE
-══════════════════════════════════════ */
+ */
 const state = {
   products: [],
   look: null,
@@ -1821,9 +1848,9 @@ const state = {
   manualLightness: null,
 };
 
-/* ══════════════════════════════════════
+/* 
    FORM HELPERS
-══════════════════════════════════════ */
+ */
 document.querySelectorAll('.event-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.event-btn').forEach(b => b.classList.remove('active'));
@@ -1903,9 +1930,9 @@ function onSlider(el) {
   document.getElementById('budgetVal').textContent = '$' + el.value;
 }
 
-/* ══════════════════════════════════════
+/* 
    SHADE MATCHING
-══════════════════════════════════════ */
+ */
 function triggerUpload(id){ document.getElementById(id).click() }
 
 function handleUpload(input, zoneId, previewId) {
@@ -2058,6 +2085,11 @@ function renderUndertone(data) {
     <div class="hex-picker-hint">If shade matches look off, click the color above to fine-tune your real skin tone.</div>
   ` : '';
 
+  const lowConfWarning = confPct < 50 ? `
+    <div class="low-conf-warning">
+      <strong>Low confidence result.</strong> For a better analysis, try uploading a clearer photo taken in natural daylight, without makeup, filters, or harsh shadows.
+    </div>` : '';
+
   document.getElementById('undertoneResult').innerHTML=`
     <div class="undertone-result">
       <div class="undertone-swatch" style="background:${data.skin_hex||data.hex_color||'#c8956b'}"></div>
@@ -2069,6 +2101,7 @@ function renderUndertone(data) {
           <div class="conf-bar-bg"><div class="conf-bar-fill" style="width:${confPct}%"></div></div>
           <span class="conf-label">confidence ${confPct}%</span>
         </div>
+        ${lowConfWarning}
         ${dualRow}
         ${skinAnalysisRow}
         ${hexPickerRow}
@@ -2107,9 +2140,9 @@ function resetUndertone(){
   const el=document.getElementById('undertoneResult'); el.innerHTML=''; el.style.display='none';
 }
 
-/* ══════════════════════════════════════
+/* 
    RECOMMEND
-══════════════════════════════════════ */
+ */
 async function submitRecommend() {
   const skinDesc = document.getElementById('skinInput').value.trim();
   const hasBudget = document.getElementById('budgetToggle').checked;
@@ -2151,9 +2184,9 @@ async function submitRecommend() {
   finally { btn.disabled=false; btn.innerHTML='Reveal My Personalised Look' }
 }
 
-/* ══════════════════════════════════════
+/* 
    ROUTINE
-══════════════════════════════════════ */
+ */
 function logRoutineDebug(payload, data){
   console.log('[Beauty] /routine payload:', payload);
   console.log('[Beauty] /routine response:', data);
@@ -2258,7 +2291,7 @@ function renderRoutine(data) {
           <div class="step-meta">
             <span class="step-price">$${s.price.toFixed(2)}</span>
             <span class="step-rating">${stars(s.rating)}</span>
-            <span class="step-tag">${s.finish}</span>
+            <span class="step-tag">${finishLabel(s.finish, s.category)}</span>
           </div>
           ${shadeStripHTML(s)}
           ${colorMatchHTML(s)}
@@ -2303,9 +2336,9 @@ function stepImgFallback(img){
   if(emoji) emoji.style.display='';
 }
 
-/* ══════════════════════════════════════
+/* 
    SKELETON
-══════════════════════════════════════ */
+ */
 function showSkeletons(){
   const el = document.getElementById('results');
   const rc = document.getElementById('resultsContent');
@@ -2327,9 +2360,9 @@ function showSkeletons(){
   el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-/* ══════════════════════════════════════
+/* 
    RENDER RESULTS
-══════════════════════════════════════ */
+ */
 function renderResults(data) {
   state.products = data.recommended_products || [];
   state.look     = data.recommended_look;
@@ -2392,9 +2425,9 @@ function renderResults(data) {
   setTimeout(()=>resultsDiv.scrollIntoView({behavior:'smooth',block:'start'}),80);
 }
 
-/* ══════════════════════════════════════
+/* 
    PRODUCT CARD HTML
-══════════════════════════════════════ */
+ */
 function productCardHTML(p, i) {
   const cs = catStyle(p.category);
   const wishlisted = state.wishlist.has(p.product_id);
@@ -2420,7 +2453,7 @@ function productCardHTML(p, i) {
         <span class="prod-price">$${p.price.toFixed(2)}</span>
         <span class="prod-stars">${stars(p.rating)}</span>
       </div>
-      <span class="prod-finish-tag">${p.finish}</span>
+      <span class="prod-finish-tag">${finishLabel(p.finish, p.category)}</span>
       ${shadeStripHTML(p)}
       ${colorMatchHTML(p)}
       ${perfumeStripHTML(p)}
@@ -2430,9 +2463,9 @@ function productCardHTML(p, i) {
   </div>`;
 }
 
-/* ══════════════════════════════════════
+/* 
    FILTER
-══════════════════════════════════════ */
+ */
 function filterCat(cat, btn) {
   state.activeFilter = cat;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
@@ -2443,9 +2476,9 @@ function filterCat(cat, btn) {
   });
 }
 
-/* ══════════════════════════════════════
+/* 
    WISHLIST PANEL
-══════════════════════════════════════ */
+ */
 function updateWishCount(){
   const el = document.getElementById('wishCount');
   if(!el) return;
@@ -2523,9 +2556,9 @@ function clearWishlist(){
   showToast('Wishlist cleared');
 }
 
-/* ══════════════════════════════════════
+/* 
    WISHLIST (heart toggle)
-══════════════════════════════════════ */
+ */
 function toggleWish(pid){
   if(state.wishlist.has(pid)){
     state.wishlist.delete(pid);
@@ -2537,7 +2570,11 @@ function toggleWish(pid){
     showToast('Removed from wishlist');
   } else {
     state.wishlist.add(pid);
-    const p = state.products.find(x => x.product_id === pid);
+    // Try current products first, then check _lastModalProduct as fallback
+    let p = state.products.find(x => x.product_id === pid);
+    if(!p && state._lastModalProduct && state._lastModalProduct.product_id === pid){
+      p = state._lastModalProduct;
+    }
     if(p) state.wishlistData.set(pid, {...p});
     const btn=document.getElementById(`wish-${pid}`);
     if(btn){btn.classList.add('wishlisted');btn.textContent='\u2665'}
@@ -2549,11 +2586,12 @@ function toggleWish(pid){
   updateWishCount();
 }
 
-/* ══════════════════════════════════════
+/* 
    MODAL
-══════════════════════════════════════ */
+ */
 function openModal(pid){
   const p = state.products.find(x=>x.product_id===pid); if(!p) return;
+  state._lastModalProduct = p;
   const cs = catStyle(p.category);
   const wishlisted = state.wishlist.has(pid);
 
@@ -2598,7 +2636,7 @@ function openModal(pid){
       <div class="modal-meta-row">
         <span class="modal-price">$${p.price.toFixed(2)}</span>
         <span class="modal-stars">${stars(p.rating)} (${p.rating}/5.0)</span>
-        <span class="modal-tag">${p.finish}</span>
+        <span class="modal-tag">${finishLabel(p.finish, p.category)}</span>
       </div>
       <div class="modal-section">
         <div class="modal-section-title">Why recommended</div>
@@ -2631,14 +2669,21 @@ function closeModal(){
 function closeModalOnBg(e){ if(e.target===document.getElementById('modalOverlay')) closeModal() }
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal() });
 
-/* ══════════════════════════════════════
+/* 
    HELPERS
-══════════════════════════════════════ */
+ */
 function stars(r){
   const n=Math.round(r);
   return '\u2605'.repeat(n)+'\u2606'.repeat(5-n);
 }
 function cap(s){ return s?s.charAt(0).toUpperCase()+s.slice(1):s }
+function finishLabel(finish, category){
+  if(category === 'perfume'){
+    const meta = SCENT_FAMILIES[(finish||'').toLowerCase()];
+    if(meta) return meta.label;
+  }
+  return cap(finish);
+}
 
 function renderError(msg){
   document.getElementById('resultsContent').innerHTML=`
@@ -2691,12 +2736,18 @@ function shadesHTML(product) {
       const descLine = rec.description
         ? `<div class="shade-rec-desc">"${rec.description}"</div>`
         : '';
+      const confPct = rec.confidence || 0;
+      const confClass = confPct >= 75 ? 'shade-conf-high' : confPct >= 50 ? 'shade-conf-mid' : 'shade-conf-low';
+      const confBar = `<div class="shade-conf-bar"><div class="shade-conf-fill ${confClass}" style="width:${confPct}%"></div><span class="shade-conf-label">${confPct}% match</span></div>`;
+      const explainLine = rec.explanation ? `<div class="shade-explanation">${rec.explanation}</div>` : '';
       recBlock = `
         <div class="shade-rec-row">
           <div class="shade-rec-circle" style="background:${rec.hex}"></div>
           <div class="shade-rec-label">
             <div class="shade-rec-title">Your Match</div>
-            <div class="shade-rec-name">${rec.name} <span style="font-weight:400;font-size:.68rem;color:var(--text-tertiary);font-family:'DM Sans',sans-serif">${rec.hex}</span></div>
+            <div class="shade-rec-name">${rec.name} <span style="font-weight:400;font-size:.68rem;color:var(--text-tertiary)">${rec.hex}</span></div>
+            ${confBar}
+            ${explainLine}
             ${note}
             ${descLine}
           </div>
@@ -2712,11 +2763,12 @@ function shadesHTML(product) {
     const nearby = shades.slice(0, 5);
     const items = nearby.map(s => {
       const isRec = rec && s.hex === rec.hex && s.name === rec.name;
+      const altConf = s.confidence ? `<span class="shade-nearby-conf">${s.confidence}%</span>` : '';
       return `<div class="shade-nearby ${isRec?'shade-nearby-match':''}">
         <div class="shade-nearby-dot" style="background:${s.hex}"></div>
         <div class="shade-nearby-info">
           <span class="shade-nearby-name">${s.name}</span>
-          <span class="shade-nearby-hex">${s.hex}</span>
+          <span class="shade-nearby-hex">${s.hex} ${altConf}</span>
         </div>
       </div>`;
     }).join('');

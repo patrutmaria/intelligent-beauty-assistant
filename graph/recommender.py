@@ -6,8 +6,8 @@ import pandas as pd
 
 from .graph_builder import BeautyGraphBuilder, FEATURE_DIM, SKIN_TYPES, EVENTS
 from .vgae_model import VGAEBeauty
-from .shade_matcher import match_shades
-from .color_advisor import recommend_families, classify_color, family_label, family_score, FAMILIES as COLOR_FAMILIES
+from skin.shade_matcher import match_shades
+from skin.color_advisor import recommend_families, classify_color, family_label, family_score, FAMILIES as COLOR_FAMILIES
 
 
 class BeautyRecommender:
@@ -417,19 +417,19 @@ class BeautyRecommender:
             if acne == "severe" and r["finish"].lower() in {"dewy", "luminous"}:
                 scores[i] *= 0.85
 
-            # Perfume scent boost
+            # Perfume scent boost : scent family + event applied independently
             cat_lower = str(r.get("category", "")).lower()
             if cat_lower == "perfume":
                 scent = self._safe_scent(r)
                 if preferred_scents:
                     pref_set = {s.lower() for s in preferred_scents}
                     scores[i] *= 3.0 if scent.lower() in pref_set else 0.15
-                elif scent and event_type:
+                if scent and event_type:
                     prefs = self._EVENT_SCENT_PREFS.get(event_type.lower(), [])
                     if scent in prefs:
                         idx = prefs.index(scent)
-                        scores[i] *= [1.80, 1.50, 1.25][idx] if idx < 3 else 1.0
-                    else:
+                        scores[i] *= [1.50, 1.30, 1.15][idx] if idx < 3 else 1.0
+                    elif not preferred_scents:
                         scores[i] *= 0.55
                 look_types = str(r.get("look_types", "") or "").lower()
                 if event_type and event_type.lower() in look_types:

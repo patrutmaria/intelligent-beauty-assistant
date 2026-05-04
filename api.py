@@ -223,11 +223,11 @@ async def analyze_undertone(
     if skin_photo is None and vein_photo is None:
         raise HTTPException(status_code=422, detail="Provide at least one photo.")
 
-    from graph.shade_analyzer import analyze_skin_photo, analyze_vein_photo, combine_results
-    from graph.face_skin_extractor import extract_skin_tone
-    from graph.skin_heuristics import analyze as heuristic_analyze
+    from skin.shade_analyzer import analyze_skin_photo, analyze_vein_photo, combine_results
+    from skin.face_skin_extractor import extract_skin_tone
+    from skin.skin_heuristics import analyze as heuristic_analyze
     try:
-        from graph.skin_classifier import classify as cnn_classify
+        from skin.skin_classifier import classify as cnn_classify
     except Exception:
         cnn_classify = None
 

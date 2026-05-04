@@ -232,31 +232,41 @@ def analyze_skin_photo(image_bytes: bytes) -> dict:
     mean_a = float(skin_lab[:, 1].mean())
     mean_b = float(skin_lab[:, 2].mean())
 
-    # Undertone classification via b*/a* ratio, calibrated against 4,800 real
-    # foundation shades from Pudding's Sephora/Ulta dataset:
-    #   warm median b*/a* = 2.09, neutral = 1.85, cool = 1.65
+    # Undertone via b*/a* ratio with adaptive thresholds per skin depth.
+    # Darker skin tones have naturally different b*/a* distributions,
+    # so fixed thresholds misclassify deep skin as warm.
     if mean_a > 0:
         ratio = mean_b / mean_a
     else:
         ratio = 1.85
 
-    if ratio >= 1.95:
+    if mean_L < 40:
+        lightness = "deep"
+        warm_thresh, cool_thresh = 2.10, 1.80  
+    elif mean_L < 52:
+        lightness = "medium-deep"
+        warm_thresh, cool_thresh = 2.05, 1.75
+    elif mean_L < 62:
+        lightness = "medium"
+        warm_thresh, cool_thresh = 2.00, 1.70
+    elif mean_L < 72:
+        lightness = "light-medium"
+        warm_thresh, cool_thresh = 1.95, 1.65
+    else:
+        lightness = "light"
+        warm_thresh, cool_thresh = 1.90, 1.60
+
+    if ratio >= warm_thresh:
         undertone = "warm"
-    elif ratio <= 1.65:
+    elif ratio <= cool_thresh:
         undertone = "cool"
     else:
         undertone = "neutral"
 
-    if mean_L < 40:
-        lightness = "deep"
-    elif mean_L < 52:
-        lightness = "medium-deep"
-    elif mean_L < 62:
-        lightness = "medium"
-    elif mean_L < 72:
-        lightness = "light-medium"
-    else:
-        lightness = "light"
+    mid = (warm_thresh + cool_thresh) / 2
+    spread = (warm_thresh - cool_thresh) / 2
+    dist_from_mid = abs(ratio - mid)
+    undertone_confidence = min(0.95, 0.55 + (dist_from_mid / spread) * 0.30)
 
     avg_rgb = _dominant_color(skin_rgb)
     hex_color = "#{:02x}{:02x}{:02x}".format(int(avg_rgb[0]), int(avg_rgb[1]), int(avg_rgb[2]))
@@ -268,7 +278,8 @@ def analyze_skin_photo(image_bytes: bytes) -> dict:
         "mean_L":     round(mean_L, 1),
         "mean_a":     round(mean_a, 2),
         "mean_b":     round(mean_b, 2),
-        "confidence": round(confidence, 2),
+        "confidence": round(max(confidence, undertone_confidence), 2),
+        "undertone_confidence": round(undertone_confidence, 2),
         "source":     "skin",
     }
 
@@ -293,26 +304,19 @@ def analyze_vein_photo(image_bytes: bytes) -> dict:
         }
 
     skin_pixels = rgb[skin_mask].astype(np.float32)
-    R = skin_pixels[:, 0]
-    G = skin_pixels[:, 1]
-    B = skin_pixels[:, 2]
+    R, G, B = skin_pixels[:, 0], skin_pixels[:, 1], skin_pixels[:, 2]
 
-    base_R = float(np.median(R))
-    base_G = float(np.median(G))
-    base_B = float(np.median(B))
+    base_R, base_G, base_B = float(np.median(R)), float(np.median(G)), float(np.median(B))
 
-    # Vein candidates: pixels darker than skin baseline with shifted B/G balance
+    # Vein candidates: darker pixels with shifted B/G balance
     L = (R + G + B) / 3
     base_L = (base_R + base_G + base_B) / 3
     darker = L < base_L - 4
-
-    # Relative B-G shift from baseline: >0 = more bluish, <0 = more greenish
     rel_BG = (B - G) - (base_B - base_G)
 
     vein_mask = darker
     if vein_mask.sum() < 50:
-        threshold = np.percentile(L, 15)
-        vein_mask = L <= threshold
+        vein_mask = L <= np.percentile(L, 15)
 
     if vein_mask.sum() < 30:
         return {
@@ -328,24 +332,53 @@ def analyze_vein_photo(image_bytes: bytes) -> dict:
     vG = float(G[vein_mask].mean())
     vB = float(B[vein_mask].mean())
 
-    # Even small B/G shifts are meaningful since we already filtered to vein-like pixels
+    # Multi-signal scoring for more robust classification
+    signals = []
+
+    # Signal 1: B-G shift (primary)
     if mean_shift > 0.5:
-        undertone  = "cool"
-        confidence = float(min(1.0, mean_shift / 4.0 + 0.55))
+        signals.append(("cool", min(0.95, mean_shift / 4.0 + 0.55)))
     elif mean_shift < -0.5:
-        undertone  = "warm"
-        confidence = float(min(1.0, abs(mean_shift) / 4.0 + 0.55))
+        signals.append(("warm", min(0.95, abs(mean_shift) / 4.0 + 0.55)))
     else:
-        undertone  = "neutral"
-        confidence = 0.55
+        signals.append(("neutral", 0.55))
+
+    # Signal 2: Histogram peak analysis — where does the B-G distribution peak?
+    hist_bg = band_rel[np.isfinite(band_rel)]
+    if len(hist_bg) > 50:
+        p25, p75 = np.percentile(hist_bg, 25), np.percentile(hist_bg, 75)
+        # If 75th percentile is strongly blue, even median being neutral → cool
+        if p75 > 1.5:
+            signals.append(("cool", 0.65))
+        elif p25 < -1.5:
+            signals.append(("warm", 0.65))
+
+    # Signal 3: Vein color in LAB space — blue veins have negative b*
+    vein_lab_b = 0.0
+    if vB > 0:
+        # Quick LAB b* estimate for vein color
+        vein_lab_b = (vB / 255.0) - (vG / 255.0)
+        if vein_lab_b > 0.05:
+            signals.append(("cool", 0.60))
+        elif vein_lab_b < -0.05:
+            signals.append(("warm", 0.60))
+
+    # Combine signals with weighted voting
+    vote = {"warm": 0.0, "cool": 0.0, "neutral": 0.0}
+    for ut, conf in signals:
+        vote[ut] += conf
+    winner = max(vote, key=vote.get)
+    total_vote = sum(vote.values())
+    confidence = round(min(0.95, vote[winner] / max(total_vote, 0.01)), 2)
 
     return {
-        "undertone":   undertone,
-        "confidence":  round(confidence, 2),
+        "undertone":   winner,
+        "confidence":  confidence,
         "blue_score":  round(mean_shift, 2),
         "green_score": round(-mean_shift, 2),
         "vein_rgb":    [int(round(vR)), int(round(vG)), int(round(vB))],
         "skin_baseline_rgb": [int(round(base_R)), int(round(base_G)), int(round(base_B))],
+        "n_signals":   len(signals),
         "source":      "vein",
     }
 

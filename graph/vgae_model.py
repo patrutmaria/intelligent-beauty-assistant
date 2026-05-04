@@ -1,6 +1,6 @@
 """
 VGAE for beauty product recommendation.
-Encoder: 2-layer GCN -> (mu, logstd) | Decoder: inner-product | Loss: BCE + beta*KL
+Encoder: 2-layer GCN -> (mu, logstd) | Decoder: inner-product | Loss: BPR + beta*KL
 """
 
 import torch
@@ -49,15 +49,17 @@ class VGAEBeauty(nn.Module):
     def decode_all(self, z):
         return torch.sigmoid(z @ z.t())
 
-    def recon_loss(self, z, pos_edge_index, neg_edge_index=None):
-        EPS = 1e-15
-        pos_loss = -torch.log(torch.sigmoid(self.decode(z, pos_edge_index)) + EPS).mean()
+    def bpr_loss(self, z, pos_edge_index, neg_edge_index=None):
+        """Bayesian Personalized Ranking loss: -log(sigma(pos - neg))."""
         if neg_edge_index is None:
             neg_edge_index = negative_sampling(
                 pos_edge_index, num_nodes=z.size(0),
                 num_neg_samples=pos_edge_index.size(1))
-        neg_loss = -torch.log(1 - torch.sigmoid(self.decode(z, neg_edge_index)) + EPS).mean()
-        return pos_loss + neg_loss
+        pos_scores = self.decode(z, pos_edge_index)
+        neg_scores = self.decode(z, neg_edge_index)
+        # Align lengths (neg sampling may return fewer samples)
+        n = min(pos_scores.size(0), neg_scores.size(0))
+        return -F.logsigmoid(pos_scores[:n] - neg_scores[:n]).mean()
 
     def kl_loss(self, mu=None, logstd=None):
         mu = self._mu if mu is None else mu
@@ -66,7 +68,7 @@ class VGAEBeauty(nn.Module):
             torch.sum(1 + 2 * logstd - mu.pow(2) - logstd.exp().pow(2), dim=1))
 
     def total_loss(self, z, pos_edge_index, neg_edge_index=None, beta=1.0):
-        return self.recon_loss(z, pos_edge_index, neg_edge_index) + beta * self.kl_loss()
+        return self.bpr_loss(z, pos_edge_index, neg_edge_index) + beta * self.kl_loss()
 
     @torch.no_grad()
     def test(self, z, pos_edge_index, neg_edge_index):
